@@ -1,6 +1,10 @@
 import { convertToCustomEntity } from '../inverters/dto/custom-entity';
 import type { CustomEntity } from '../inverters/dto/custom-entity';
 import type { NamedLoadItem, detailedPowerFlowCardConfig } from '../types';
+import {
+	isImageIcon,
+	resolveLoadSplitSvgKind,
+} from './load-split-icons';
 
 /** Mockup-style defaults: car silhouettes, house, outdoor heat pump, tank. */
 const DEFAULT_HOUSE_ICON = 'mdi:home';
@@ -85,15 +89,24 @@ export function buildNamedLoads(
 	return list.slice(0, MAX_VISIBLE_LOADS).map((item) => {
 		const state = entityFromStates(hassStates, item.entity, track);
 		const power = state.isValid() ? state.toPower(false) : 0;
+		const fromMap = config.icons?.[item.id];
 		const icon =
 			item.icon && item.icon !== 'default'
 				? item.icon
-				: resolveNodeIcon(config, item.id, defaultIcon);
+				: fromMap && fromMap !== 'default'
+					? fromMap
+					: resolveNodeIcon(config, item.id, defaultIcon);
+		// Built-in mockup SVG wins for known ids / remapped legacy MDI,
+		// unless the user supplied an image URL.
+		const svgKind = isImageIcon(icon)
+			? undefined
+			: (resolveLoadSplitSvgKind(item.id, icon) ?? undefined);
 		return {
 			id: item.id,
 			name: item.name,
 			entity: item.entity,
 			icon,
+			svgKind,
 			power,
 			colour: colourFor(power, item.max_threshold),
 			state,

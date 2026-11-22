@@ -5,6 +5,12 @@ import { renderCircle } from '../../../helpers/render-circle';
 import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 import { localize } from '../../../localize/localize';
 import { UnitOfPower } from '../../../const';
+import {
+	isImageIcon,
+	loadSplitSvgPaths,
+	resolveLoadSplitSvgKind,
+	type LoadSplitSvgKind,
+} from '../../../helpers/load-split-icons';
 import type {
 	DataDto,
 	NamedLoadItem,
@@ -33,38 +39,76 @@ function formatPower(
 
 const HUB_BOX_W = 70;
 const HUB_ICON_SIZE = 28;
+const CHILD_ICON_SIZE = 22;
 
-/** Top-left X so a square icon FO is centred over a hub power box. */
+/** Top-left X so a square icon is centred over a hub power box. */
 function hubIconX(boxX: number, iconSize: number = HUB_ICON_SIZE): number {
-	const foW = iconSize + 4;
-	return boxX + (HUB_BOX_W - foW) / 2;
+	return boxX + (HUB_BOX_W - iconSize) / 2;
 }
 
-function renderColouredIcon(
+function wrapClickable(entity: string | undefined, content: unknown) {
+	if (entity) {
+		return svg`
+			<a href="#" @click=${(e) => Utils.handlePopup(e, entity)}>${content}</a>
+		`;
+	}
+	return content;
+}
+
+/** Prefer built-in mockup SVG paths; fall back to ha-icon / image URL. */
+function renderSplitIcon(
 	entity: string | undefined,
 	icon: string | undefined,
+	svgKind: LoadSplitSvgKind | null | undefined,
 	colour: string,
 	x: number,
 	y: number,
-	size: number = 20,
+	size: number,
 ) {
+	const kind = svgKind || null;
+	if (kind && loadSplitSvgPaths[kind]) {
+		const body = svg`
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				x="${x}"
+				y="${y}"
+				width="${size}"
+				height="${size}"
+				viewBox="0 0 24 24"
+				overflow="visible"
+			>
+				<path fill="${colour}" d="${loadSplitSvgPaths[kind]}" />
+			</svg>
+		`;
+		return wrapClickable(entity, body);
+	}
+
+	if (isImageIcon(icon)) {
+		const body = svg`
+			<image
+				href="${icon}"
+				x="${x}"
+				y="${y}"
+				width="${size}"
+				height="${size}"
+				preserveAspectRatio="xMidYMid meet"
+			/>
+		`;
+		return wrapClickable(entity, body);
+	}
+
 	if (!icon) {
 		return svg``;
 	}
 	const foW = size + 4;
 	const fo = svg`
-		<foreignObject x="${x}" y="${y}" width="${foW}" height="${foW}" display="inline">
+		<foreignObject x="${x - 2}" y="${y - 2}" width="${foW}" height="${foW}" display="inline">
 			<div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; justify-content: center; width: ${foW}px; height: ${foW}px;">
 				<ha-icon icon="${icon}" style="color: ${colour}; --mdc-icon-size: ${size}px;"></ha-icon>
 			</div>
 		</foreignObject>
 	`;
-	if (entity) {
-		return svg`
-			<a href="#" @click=${(e) => Utils.handlePopup(e, entity)}>${fo}</a>
-		`;
-	}
-	return fo;
+	return wrapClickable(entity, fo);
 }
 
 function renderChildChip(
@@ -75,9 +119,19 @@ function renderChildChip(
 	decimalPlaces: number,
 ) {
 	const cx = x + CHIP_W / 2;
+	const iconX = cx - CHILD_ICON_SIZE / 2;
+	const iconY = y - CHILD_ICON_SIZE - 2;
 	return svg`
 		<g id="named-load-${item.id}" class="load-group-child">
-			${renderColouredIcon(item.entity, item.icon, item.colour, cx - 12, y - 22, 20)}
+			${renderSplitIcon(
+				item.entity,
+				item.icon,
+				item.svgKind,
+				item.colour,
+				iconX,
+				iconY,
+				CHILD_ICON_SIZE,
+			)}
 			<rect
 				x="${x}"
 				y="${y}"
@@ -277,9 +331,12 @@ export const renderLoadGroupElements = (
 				'#lg-cars-line',
 				config.load.invert_flow === true,
 			)}
-			${renderColouredIcon(
+			${renderSplitIcon(
 				config.load_groups?.car_entity,
 				carIcon,
+				isImageIcon(carIcon)
+					? null
+					: resolveLoadSplitSvgKind('car', carIcon),
 				carColour,
 				hubIconX(coords.carsBoxX),
 				coords.carsIconY,
@@ -356,9 +413,12 @@ export const renderLoadGroupElements = (
 				'#lg-house-line',
 				config.load.invert_flow === true,
 			)}
-			${renderColouredIcon(
+			${renderSplitIcon(
 				config.load_groups?.house_entity,
 				houseIcon,
+				isImageIcon(houseIcon)
+					? null
+					: resolveLoadSplitSvgKind('house', houseIcon),
 				houseColour,
 				hubIconX(coords.houseBoxX),
 				coords.houseIconY,

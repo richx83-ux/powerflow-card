@@ -1,6 +1,11 @@
 # House vs cars load-flow split — prefer compact + wide.
 # Hierarchy: total load → Cars → (Tesla, Puma) and House → (Heat Pump, Sunamp).
 # Do NOT map these into load.additional_loads / essential_load1–4.
+#
+# Icons: known ids (house, car, tesla, puma, heat_pump, sunamp) ship built-in
+# mockup SVGs (car side-view, house, outdoor heat pump, cylindrical tank).
+# Old MDI keys (mdi:ev-station, mdi:snowflake, mdi:water-boiler) are remapped.
+# Only an image URL overrides the built-in artwork.
 type: custom:detailed-power-flow-card
 cardstyle: compact
 wide: true
@@ -21,25 +26,28 @@ large_loads:
   - id: heat_pump
     name: Heat Pump
     entity: sensor.heat_pump_power
+    # Built-in outdoor unit SVG (mdi:snowflake also remaps here)
     icon: mdi:heat-pump
     max_threshold: 5000
   - id: sunamp
     name: Sunamp
     entity: sensor.sunamp_power
-    icon: mdi:water-boiler
+    # Built-in tank SVG (mdi:water-boiler also remaps here)
+    icon: mdi:propane-tank
 
 # Nested under the Cars hub only
 car_loads:
   - id: tesla
     name: Tesla
     entity: sensor.tesla_charge_power
-    icon: mdi:car-electric
+    # Built-in side-view car SVG (mdi:ev-station also remaps here)
+    icon: mdi:car
   - id: puma
     name: Puma
     entity: sensor.ford_puma_charge_power
     icon: mdi:car
 
-# Optional overrides — defaults already use car / home / heat-pump / propane-tank.
+# Optional — may omit entirely; id-based mockup SVGs still apply.
 icons:
   house: mdi:home
   car: mdi:car
