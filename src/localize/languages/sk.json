@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Karta Home Assistant na emuláciu Sunsynk power flow, ktorý sa zobrazuje na obrazovke invertora",
+    "description": "Karta Home Assistant na podrobnú vizualizáciu toku energie invertora",
     "version": "Verzia",
     "runtime_to": "RUNTIME DO",
     "battery_floating": "PLÁVAJÚCA BATÉRIA",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Home Assistant kaart Sunsynk võimsusvoogu emuleerimiseks, mis kuvatakse inverteri ekraanil",
+    "description": "Home Assistant kaart inverteri võimsusvoo üksikasjalikuks visualiseerimiseks",
     "version": "Versioon",
     "runtime_to": "TÖÖAEG KUNI",
     "battery_floating": "UJUV AKU",

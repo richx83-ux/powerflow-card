@@ -1,15 +1,15 @@
-# Sunsynk Power Flow Card
+# Detailed Power Flow Card
 
-An animated Home Assistant card to emulate the power flow that's shown on the Sunsynk Inverter screen. You can use this to display data from many inverters e.g. Sunsynk, Deye, Solis, Lux, FoxESS, Goodwe, Huawei etc as long as you have the required sensor data. See the [wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki) for integration methods and examples.
+An animated Home Assistant card for visualizing inverter power flow (solar, battery, grid, and loads). You can use this to display data from many inverters — e.g. Sunsynk, Deye, Solis, Lux, FoxESS, Goodwe, Huawei — as long as you have the required sensor data. See the [upstream wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki) for integration methods and examples.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=slipx06&repository=sunsynk-power-flow-card&category=plugin)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/slipx06/sunsynk-power-flow-card?style=for-the-badge)
-[![Community Forum](https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge)](https://community.home-assistant.io/t/sunsynk-deye-inverter-power-flow-card/562933/1)
-<a href="https://www.buymeacoffee.com/slipx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="28" width="120"></a>
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=richx83-ux&repository=powerflow-card&category=plugin)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/richx83-ux/powerflow-card?style=for-the-badge)
 
-## Powerflow Card fork (`richx83-ux/powerflow-card`)
+## About this fork (`richx83-ux/powerflow-card`)
 
-This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design, documentation, and releases; this fork is where Powerflow-specific expansions will land.
+This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design, documentation, and releases; this fork is where Detailed Power Flow Card expansions will land.
+
+The Lovelace card type remains `custom:sunsynk-power-flow-card` (and the JS filename is unchanged) so existing dashboards and HACS installs keep working.
 
 ### Planned expansions
 
@@ -22,7 +22,7 @@ See [`docs/powerflow-expansions/config-sketch.md`](docs/powerflow-expansions/con
 
 ## Documentation
 
-Refer to [https://slipx06.github.io/sunsynk-power-flow-card/index.html](https://slipx06.github.io/sunsynk-power-flow-card/index.html)
+Refer to [https://slipx06.github.io/sunsynk-power-flow-card/index.html](https://slipx06.github.io/sunsynk-power-flow-card/index.html) for full upstream docs. Fork-specific notes live under [`docs/`](docs/).
 
 ## Features
 
@@ -84,14 +84,14 @@ The card can be installed via HACS (recommended) or manually.
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg)](https://github.com/custom-components/hacs)
 
 1. Install HACS.
-2. Search & Install sunsynk-power-flow-card or click the button below.
+2. Add this repository as a custom repository (or search for Detailed Power Flow Card once listed), or click the button below.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=slipx06&repository=sunsynk-power-flow-card&category=plugin)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=richx83-ux&repository=powerflow-card&category=plugin)
 
 ### Manual Installation
 
-1. Create a new directory under `www` and name it `sunsynk-power-flow-card` e.g `www/sunsynk-power-flow-card/`.
-2. Copy the `sunsynk-power-flow-card.js` into the directory.
+1. Create a new directory under `www` and name it `detailed-power-flow-card` e.g `www/detailed-power-flow-card/`.
+2. Copy the `sunsynk-power-flow-card.js` into the directory (filename kept for compatibility with existing configs).
 3. Add the resource to your Dashboard. You can append the filename with a `?ver=x` and increment x each time you download a new version to force a reload and avoid using a cached version. It is also a good idea to clear your browser cache.
 
 ![image](https://user-images.githubusercontent.com/7227275/235441241-93ab0c7d-341d-428f-8ca8-60ec932dde2d.png)

@@ -5,7 +5,7 @@
 .. note::
    Please report all feedback or Issues to the Discussion (Support Sections) of: https://github.com/Roving-Ronin/sunsynk-power-flow-card.
 
-To use the Sunsynk card with Huawei Solar (or iStore in Australia) you need to copy the huawei_derived_sensors.yaml and sunsynk_card_derived_sensors.yaml files to your /homeassistant/packages directory. Upon restarting Home Assistant this will create all the required derived sensors, based upon the baseline sensors from the WLCRS integration, needed to populate the Sunsynk card. In addition to this, you will need to find an electricity_costs_xxx.yaml file that matches your electricity providers tariff plan, or is similiar and you can customise the 'Electrity - Price', 'Electricity - FIT' and 'Energy Meter' sections to reflect your rate plan costs and usage period(s), all these files are available from: https://github.com/slipx06/sunsynk-power-flow-card/tree/master/docs/examples/huawei_packages.
+To use the Detailed Power Flow Card with Huawei Solar (or iStore in Australia) you need to copy the huawei_derived_sensors.yaml and sunsynk_card_derived_sensors.yaml files to your /homeassistant/packages directory. Upon restarting Home Assistant this will create all the required derived sensors, based upon the baseline sensors from the WLCRS integration, needed to populate the card. In addition to this, you will need to find an electricity_costs_xxx.yaml file that matches your electricity providers tariff plan, or is similiar and you can customise the 'Electrity - Price', 'Electricity - FIT' and 'Energy Meter' sections to reflect your rate plan costs and usage period(s), all these files are available from: https://github.com/richx83-ux/powerflow-card/tree/main/docs/examples/huawei_packages (originally from upstream slipx06).
 
 .. Required Sensor Groups::
 
@@ -21,7 +21,7 @@ Whilst it would be simplest to create the additional 'sensor groups' using yaml 
 
 ________________________
 
-To work with the Sunsynk card and the additional derived sensors, some sensors that are disabled by default by the WLCRS integration, must be manually enabled. Listed below the the various devices and the list of sensors for each, that are required to be enabled (at a minimum).
+To work with the Detailed Power Flow Card and the additional derived sensors, some sensors that are disabled by default by the WLCRS integration, must be manually enabled. Listed below the the various devices and the list of sensors for each, that are required to be enabled (at a minimum).
 
 
 ..  csv-table:: POWER METER:
@@ -78,13 +78,13 @@ To work with the Sunsynk card and the additional derived sensors, some sensors t
     "Total Charge", "-"
     "Total Discharge", "-"
 
-With these sensors active, you can then following the installation instructions for the Sunsynk card, however when you add the card to Home Assistant, change to the 'Show Code Editor' view and paste the example code below (that most closely matches your Huawei/iStore setup) into the editor, replacing all the default code shown. Finally, validate the example code copied from below, updating to suite your setup.
+With these sensors active, you can then following the installation instructions for the Detailed Power Flow Card, however when you add the card to Home Assistant, change to the 'Show Code Editor' view and paste the example code below (that most closely matches your Huawei/iStore setup) into the editor, replacing all the default code shown. Finally, validate the example code copied from below, updating to suite your setup.
 
 ________________________
 
 .. note::
 
-   Data sources for the Sunsynk card is provided by the use of the WLCRS "Huawei Solar" integration - https://github.com/wlcrs/huawei_solar/wiki, as well as the Energy Meter integration https://github.com/zeronounours/HA-custom-component-energy-meter, must be installed prior to installing the Sunsynk card.
+   Data sources for the Detailed Power Flow Card is provided by the use of the WLCRS "Huawei Solar" integration - https://github.com/wlcrs/huawei_solar/wiki, as well as the Energy Meter integration https://github.com/zeronounours/HA-custom-component-energy-meter, must be installed prior to installing the card.
 
 
 ______________________________________________________________

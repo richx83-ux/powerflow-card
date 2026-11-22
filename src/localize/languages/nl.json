@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Een Home Assistant-kaart om de Sunsynk energiestroom te emuleren die op het omvormerscherm wordt weergegeven",
+    "description": "Een Home Assistant-kaart voor gedetailleerde visualisatie van de omvormer-energiestroom",
     "version": "Versie",
     "runtime_to": "WERKTIJD TOT",
     "battery_floating": "DRIJVENDE BATTERIJ",

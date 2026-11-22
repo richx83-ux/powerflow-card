@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Una tarjeta de Home Assistant para emular el flujo de energía Sunsynk que se muestra en la pantalla del inversor",
+    "description": "Una tarjeta de Home Assistant para la visualización detallada del flujo de energía del inversor",
     "version": "Versión",
     "runtime_to": "TIEMPO DE FUNCIONAMIENTO HASTA",
     "battery_floating": "BATERÍA EN FLOTACIÓN",

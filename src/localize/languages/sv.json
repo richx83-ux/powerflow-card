@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Ett Home Assistant-kort för att emulera Sunsynk-energiflödet som visas på omvandlarskärmen",
+    "description": "Ett Home Assistant-kort för detaljerad visualisering av växelriktarens energiflöde",
     "version": "Version",
     "runtime_to": "DRIFTTID TILL",
     "battery_floating": "BATTERI I FLYTLADDNING",

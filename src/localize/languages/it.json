@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Una scheda Home Assistant per emulare il flusso di potenza Sunsynk visualizzato sullo schermo dell'inverter",
+    "description": "Una scheda Home Assistant per la visualizzazione dettagliata del flusso di potenza dell'inverter",
     "version": "Versione",
     "runtime_to": "DURATA AL",
     "battery_floating": "BATTERY CARICA",
