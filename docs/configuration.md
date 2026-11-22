@@ -9,8 +9,11 @@ The card can be configured through the following attributes:
 
 | Attribute              | Requirement  | Default                                             | Description                                                                                                                                                                                        |
 | ---------------------- | ------------ | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type:                  | **Required** | `custom:detailed-power-flow-card`                    | The custom card.                                                                                                                                                                                   |
-| cardstyle:             | **Required** | `lite`                                              | Selects the card layout that is used `compact`, `lite` or `full`.                                                                                                                                  |
+| type:                  | **Required** | `custom:detailed-power-flow-card`                   | The custom card.                                                                                                                                                                                   |
+| cardstyle:             | **Required** | `photo`                                             | Layout: `photo` (glass tiles over a background image — default), `classic` (legacy SVG inverter diagram, same as `lite`), or `compact` / `lite` / `full`.                                          |
+| background_image:      | Optional     |                                                     | Photo mode: local (`/local/…`, `/media/…`) or remote image URL for the card background. Omit for a dusk gradient placeholder.                                                                      |
+| background_fit:        | Optional     | `cover`                                             | Photo mode: `cover` (fill/crop) or `contain`.                                                                                                                                                      |
+| photo:                 | Optional     | See [Photo mode](#photo-mode)                       | Glass tile opacity, blur, flow style, and accent for `cardstyle: photo`.                                                                                                                           |
 | large_font:            | Optional     | `false`                                             | Increases font size of sensor data.                                                                                                                                                                |
 | wide:                  | Optional     | `false`                                             | Display the card content for wide screen format (16:9).                                                                                                                                            |
 | title:                 | Optional     |                                                     | Set the card title i.e. Inverter One.                                                                                                                                                              |
@@ -204,33 +207,49 @@ These attributes are only needed if `show_solar` is set to `true`.
 | invert_flow:         | Optional    | `false`           | Inverts the animated flow.                                                                                                                                                                                                                                                                                                                                                                                 |
 | label_daily_load:    | Optional    |                   | Set custom text for the "DAILY LOAD" label that is displayed.                                                                                                                                                                                                                                                                                                                                              |
 
+### Photo mode
+
+Default `cardstyle: photo` draws **glass tiles** over a configurable background image with animated dashed flow lines (Manhattan or curved). Entity YAML is the same as the classic card; `load_groups` / `large_loads` / `car_loads` map to tiles. Full example: [`docs/examples/photo-glass-tiles.yaml`](examples/photo-glass-tiles.yaml).
+
+| Attribute              | Requirement | Default     | Description                                                                                                                              |
+| ---------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `background_image`     | Optional    |             | Image URL: `/local/house.jpg`, `/media/local/…`, or `https://…`. Empty → dusk gradient placeholder (no copyrighted stock photo bundled). |
+| `background_fit`       | Optional    | `cover`     | `cover` or `contain`.                                                                                                                    |
+| `photo.tile_opacity`   | Optional    | `0.55`      | Dark glass fill opacity (`0.15`–`1.2`).                                                                                                  |
+| `photo.tile_blur`      | Optional    | `12`        | `backdrop-filter` blur in px (where the browser / HA WebView supports it).                                                               |
+| `photo.flow_style`     | Optional    | `manhattan` | `manhattan` (right-angle) or `curved`.                                                                                                   |
+| `photo.flow_threshold` | Optional    | `1`         | Hide animated flow below this many watts.                                                                                                |
+| `photo.accent`         | Optional    | `#5fb6ad`   | Accent for idle chrome.                                                                                                                  |
+
+Use `cardstyle: classic` (or `lite` / `compact` / `full`) for the legacy SVG inverter diagram.
+
 ### House / cars load split
 
-Additive options that split the essential load sink into **House** and **Cars** hierarchical branches. Omit them to keep the classic single essential sink. Prefer `cardstyle: compact` with `wide: true`. Children nest under their group (Cars → vehicles, House → large loads) — do **not** put these on `load.additional_loads` / `essential_load1–4`. Full example: [`docs/examples/house-cars-load-split.yaml`](examples/house-cars-load-split.yaml). Sketch: [`docs/powerflow-expansions/config-sketch.md`](powerflow-expansions/config-sketch.md).
+Additive options that split loads into **House** and **Cars** (glass tiles in photo mode, hierarchical branches in classic SVG). Omit them to keep a single house/essential sink. For classic SVG prefer `cardstyle: compact` with `wide: true`. Children nest under their group (Cars → vehicles, House → large loads) — do **not** put these on `load.additional_loads` / `essential_load1–4`. Examples: [`photo-glass-tiles.yaml`](examples/photo-glass-tiles.yaml), [`house-cars-load-split.yaml`](examples/house-cars-load-split.yaml). Sketch: [`docs/powerflow-expansions/config-sketch.md`](powerflow-expansions/config-sketch.md).
 
-| Attribute / block   | Requirement | Default | Description |
-| ------------------- | ----------- | ------- | ----------- |
-| `load_groups.show_split` | Optional | `false` | When `true` **and** both `house_entity` and `car_entity` are set, draw House and Cars hubs from the total load node. Legacy essential-load chips/icons are hidden while the split is active. |
-| `load_groups.house_entity` | Optional | | Power sensor for the house hub. |
-| `load_groups.car_entity` | Optional | | Power sensor for the cars hub. |
-| `load_groups.house_name` | Optional | `House` | Label under the house hub. |
-| `load_groups.car_name` | Optional | `Cars` | Label under the cars hub. |
-| `large_loads` | Optional | `[]` | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4). |
-| `car_loads` | Optional | `[]` | Nested chips under Cars only for individual vehicles (max 4). |
-| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids use card-shipped original vector silhouettes** (see below); image URLs still override. |
+| Attribute / block          | Requirement | Default | Description                                                                                                                                                                                  |
+| -------------------------- | ----------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load_groups.show_split`   | Optional    | `false` | When `true` **and** both `house_entity` and `car_entity` are set, draw House and Cars hubs from the total load node. Legacy essential-load chips/icons are hidden while the split is active. |
+| `load_groups.house_entity` | Optional    |         | Power sensor for the house hub.                                                                                                                                                              |
+| `load_groups.car_entity`   | Optional    |         | Power sensor for the cars hub.                                                                                                                                                               |
+| `load_groups.house_name`   | Optional    | `House` | Label under the house hub.                                                                                                                                                                   |
+| `load_groups.car_name`     | Optional    | `Cars`  | Label under the cars hub.                                                                                                                                                                    |
+| `large_loads`              | Optional    | `[]`    | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4).                                                                                                        |
+| `car_loads`                | Optional    | `[]`    | Nested chips under Cars only for individual vehicles (max 4).                                                                                                                                |
+| `icons`                    | Optional    | `{}`    | Optional map of node id → `mdi:*` or image URL. **Known split ids use card-shipped original vector silhouettes** (see below); image URLs still override.                                     |
 
 ### Custom split icons (by load id)
 
 When `load_groups.show_split` is on, these node **ids** render **thin stroke line-art** icons (mockup style: outline cars/house/appliances on dark dashboards — no brand logos):
 
-| Node id | Artwork | Suggested YAML |
-| --- | --- | --- |
-| `tesla` | Model Y–style fastback (doors, glass, wheels) | `id: tesla` (icon optional) |
-| `puma` | Upright compact crossover (arched rear) | `id: puma` (icon optional) |
-| `heat_pump` / `heatpump` | Outdoor unit (fan + louvers) + indoor unit | `id: heat_pump` — **not** `mdi:snowflake` |
-| `sunamp` / `tank` / `water_heater` | Banded cylindrical thermal store | `id: sunamp` |
-| `car` / `cars` | Outline EV hatch (Cars hub) | omit or any remapped MDI |
-| `house` | Outline home with windows/door/chimney | omit or any remapped MDI |
+| Node id                            | Artwork                                       | Suggested YAML                            |
+| ---------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| `tesla`                            | Model Y–style fastback (doors, glass, wheels) | `id: tesla` (icon optional)               |
+| `puma`                             | Upright compact crossover (arched rear)       | `id: puma` (icon optional)                |
+| `heat_pump` / `heatpump`           | Outdoor unit (fan + louvers) + indoor unit    | `id: heat_pump` — **not** `mdi:snowflake` |
+| `sunamp` / `tank` / `water_heater` | Banded cylindrical thermal store              | `id: sunamp`                              |
+| `car` / `cars`                     | Outline EV hatch (Cars hub)                   | omit or any remapped MDI                  |
+| `house`                            | Outline home with windows/door/chimney        | omit or any remapped MDI                  |
 
 Icons are chosen from **`id`**, so YAML does not need brand logo URLs. Legacy MDI keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, …) remap to the matching custom glyph. To force custom art, set an **image URL** on `icon:` or under `icons:`.
 

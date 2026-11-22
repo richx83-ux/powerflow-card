@@ -41,6 +41,10 @@ export enum InverterModel {
 }
 
 export enum CardStyle {
+	/** Photo-background glass tiles with animated flow lines (primary). */
+	Photo = 'photo',
+	/** Alias for the classic SVG inverter diagram (lite layout). */
+	Classic = 'classic',
 	Compact = 'compact',
 	Lite = 'lite',
 	Full = 'full',
@@ -50,6 +54,23 @@ export enum AutarkyType {
 	Energy = 'energy',
 	Power = 'power',
 	No = 'no',
+}
+
+/** Options for cardstyle: photo (glass tiles over a background image). */
+export interface PhotoCardOptions {
+	/** Background image URL (local /media or http). Prefer top-level background_image. */
+	background_image?: string;
+	background_fit?: 'cover' | 'contain';
+	/** Glass tile fill opacity (0.15–1.2). Default 0.55. */
+	tile_opacity?: number;
+	/** backdrop-filter blur in px. Default 12. */
+	tile_blur?: number;
+	/** Flow path geometry. Default manhattan. */
+	flow_style?: 'manhattan' | 'curved';
+	/** Hide animated flow below this watts. Default 1. */
+	flow_threshold?: number;
+	/** Accent colour for idle tiles / chrome. */
+	accent?: string;
 }
 
 export interface detailedPowerFlowCardConfig extends LovelaceCardConfig {
@@ -63,6 +84,12 @@ export interface detailedPowerFlowCardConfig extends LovelaceCardConfig {
 	center_no_grid: boolean;
 	card_height?: string;
 	card_width?: string;
+	/** Photo mode: local or remote background image URL. */
+	background_image?: string;
+	/** Photo mode: cover (crop) or contain. */
+	background_fit?: 'cover' | 'contain';
+	/** Photo-mode glass / flow options. */
+	photo?: PhotoCardOptions;
 	decimal_places?: number;
 	decimal_places_energy?: number;
 	dynamic_line_width?: boolean;

@@ -38,6 +38,7 @@ import merge from 'lodash.merge';
 import { Utils } from './helpers/utils';
 import { fullCard } from './cards/full-card';
 import { compactCard } from './cards/compact-card';
+import { photoCard } from './cards/photo-card';
 import { globalData } from './helpers/globals';
 import { InverterFactory } from './inverters/inverter-factory';
 import { BatteryIconManager } from './helpers/battery-icon-manager';
@@ -328,7 +329,7 @@ export class DetailedPowerFlowCard extends LitElement {
 
 	static getStubConfig() {
 		return {
-			cardstyle: CardStyle.Lite,
+			cardstyle: CardStyle.Photo,
 			show_solar: true,
 			battery: {
 				energy: 0,
@@ -2801,7 +2802,7 @@ export class DetailedPowerFlowCard extends LitElement {
 		};
 
 		let template: TemplateResult | null = null;
-		let variantKey: 'full' | 'compact' | undefined;
+		let variantKey: 'photo' | 'full' | 'compact' | undefined;
 
 		// loadN_name doubles as either a literal label or an entity id (same pattern as loadN_icon):
 		// if the value resolves to a known entity, that entity's state is used as the name.
@@ -2837,10 +2838,13 @@ export class DetailedPowerFlowCard extends LitElement {
 		const configWithResolvedLoad =
 			resolvedLoad !== config.load ? { ...config, load: resolvedLoad } : config;
 
-		if (this.isFullCard) {
+		if (this.isPhotoCard) {
+			variantKey = 'photo';
+			template = photoCard(configWithResolvedLoad, inverterImg, data);
+		} else if (this.isFullCard) {
 			variantKey = 'full';
 			template = fullCard(configWithResolvedLoad, inverterImg, data);
-		} else if (this.isLiteCard || this.isCompactCard) {
+		} else if (this.isLiteCard || this.isCompactCard || this.isClassicCard) {
 			variantKey = 'compact';
 			template = compactCard(configWithResolvedLoad, inverterImg, data);
 		}
@@ -2974,12 +2978,24 @@ export class DetailedPowerFlowCard extends LitElement {
 		this._pendingSpeedUpdates.clear();
 	}
 
+	get isPhotoCard() {
+		return this._config.cardstyle == CardStyle.Photo;
+	}
+
+	/** Classic SVG inverter diagram — alias for lite. */
+	get isClassicCard() {
+		return this._config.cardstyle == CardStyle.Classic;
+	}
+
 	get isCompactCard() {
 		return this._config.cardstyle == CardStyle.Compact;
 	}
 
 	get isLiteCard() {
-		return this._config.cardstyle == CardStyle.Lite;
+		return (
+			this._config.cardstyle == CardStyle.Lite ||
+			this._config.cardstyle == CardStyle.Classic
+		);
 	}
 
 	get isFullCard() {

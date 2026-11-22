@@ -1,10 +1,7 @@
 import { convertToCustomEntity } from '../inverters/dto/custom-entity';
 import type { CustomEntity } from '../inverters/dto/custom-entity';
 import type { NamedLoadItem, detailedPowerFlowCardConfig } from '../types';
-import {
-	isImageIcon,
-	resolveLoadSplitSvgKind,
-} from './load-split-icons';
+import { isImageIcon, resolveLoadSplitSvgKind } from './load-split-icons';
 
 /** Modern MDI defaults (same glyphs as built-in split SVG paths). */
 const DEFAULT_HOUSE_ICON = 'mdi:home-outline';
@@ -157,26 +154,23 @@ export function buildLoadGroupSnapshot(
 		carIcon: resolveNodeIcon(config, 'car', DEFAULT_CAR_ICON),
 		houseName: config.load_groups?.house_name || 'House',
 		carName: config.load_groups?.car_name || 'Cars',
-		largeLoads: showLoadSplit
-			? buildNamedLoads(
-					config,
-					config.large_loads,
-					hassStates,
-					track,
-					colourFor,
-					DEFAULT_LARGE_LOAD_ICON,
-				)
-			: [],
-		carLoads: showLoadSplit
-			? buildNamedLoads(
-					config,
-					config.car_loads,
-					hassStates,
-					track,
-					colourFor,
-					DEFAULT_CAR_ICON,
-				)
-			: [],
+		// Always resolve named loads when configured (photo glass tiles + classic split).
+		largeLoads: buildNamedLoads(
+			config,
+			config.large_loads,
+			hassStates,
+			track,
+			colourFor,
+			DEFAULT_LARGE_LOAD_ICON,
+		),
+		carLoads: buildNamedLoads(
+			config,
+			config.car_loads,
+			hassStates,
+			track,
+			colourFor,
+			DEFAULT_CAR_ICON,
+		),
 	};
 }
 

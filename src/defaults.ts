@@ -1,7 +1,7 @@
 import { InverterModel } from './types';
 
 export default {
-	cardstyle: 'lite',
+	cardstyle: 'photo',
 	wide: false,
 	large_font: false,
 	show_solar: true,
@@ -16,6 +16,15 @@ export default {
 	disable_animations: false,
 	max_line_width: 4,
 	min_line_width: 1,
+	background_image: '',
+	background_fit: 'cover',
+	photo: {
+		tile_opacity: 0.55,
+		tile_blur: 12,
+		flow_style: 'manhattan',
+		flow_threshold: 1,
+		accent: '#5fb6ad',
+	},
 	inverter: {
 		modern: true,
 		colour: '#9e9e9e',

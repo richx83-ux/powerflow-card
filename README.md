@@ -2,13 +2,15 @@
 
 A Home Assistant Lovelace card for **detailed inverter power-flow visualization** — solar, battery, grid, and loads — with animated flows and configurable layout.
 
+**Photo mode** (default): glass tiles over your house photo, with stroke line-art icons and animated flow lines. Legacy SVG inverter diagrams remain as `cardstyle: classic` / `lite` / `compact` / `full`.
+
 Works with many inverter brands when you have the required sensors.
 
-| | |
-| --- | --- |
-| **HACS name** | Detailed Power Flow Card |
+|                   |                                   |
+| ----------------- | --------------------------------- |
+| **HACS name**     | Detailed Power Flow Card          |
 | **Lovelace type** | `custom:detailed-power-flow-card` |
-| **Resource** | `detailed-power-flow-card.js` |
+| **Resource**      | `detailed-power-flow-card.js`     |
 
 [![HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=richx83-ux&repository=powerflow-card&category=plugin)
 ![GitHub release](https://img.shields.io/github/v/release/richx83-ux/powerflow-card?style=for-the-badge)
@@ -17,7 +19,11 @@ Works with many inverter brands when you have the required sensors.
 
 ```yaml
 type: custom:detailed-power-flow-card
+cardstyle: photo
+background_image: /local/house-dusk.jpg
 ```
+
+Map house / cars / appliances with the same `load_groups`, `large_loads`, and `car_loads` keys as before — see [`docs/examples/photo-glass-tiles.yaml`](docs/examples/photo-glass-tiles.yaml).
 
 After installing, add a dashboard resource pointing at `detailed-power-flow-card.js`, then add the card above (or pick **Detailed Power Flow Card** in the UI).
 
@@ -34,27 +40,21 @@ After installing, add a dashboard resource pointing at `detailed-power-flow-card
 
 1. Create `www/detailed-power-flow-card/`.
 2. Copy `detailed-power-flow-card.js` into that folder.
-3. Add a Lovelace resource, e.g. `/local/detailed-power-flow-card/detailed-power-flow-card.js` (append `?ver=7.6.2` when updating to bust cache).
+3. Add a Lovelace resource, e.g. `/local/detailed-power-flow-card/detailed-power-flow-card.js` (append `?ver=7.7.0` when updating to bust cache).
 4. Add a card with `type: custom:detailed-power-flow-card`.
 
 ## Features
 
-- Three layouts: `compact`, `lite`, or `full` (optional wide 16:9 view).
+- **Photo glass tiles** (`cardstyle: photo`): configurable background image, dark frosted tiles, Manhattan/curved animated flows.
+- Stroke line-art icons for Model Y, Puma, heat pump, Sunamp, house, and cars hub.
+- House vs cars split via `load_groups` / `large_loads` / `car_loads`.
+- Legacy layouts: `classic` (alias of `lite`), `compact`, `lite`, or `full` (optional wide 16:9 view).
 - Animated power flow from sensor values (supports inverted battery, AUX, and grid power).
-- Dynamic battery image from SOC; grid connected status.
-- Battery runtime from capacity + shutdown SOC (optional).
 - Daily totals, MPPT labels, AUX / non-essential loads, energy cost, solar sell.
 - Clickable entities for more-info; scalable via `card_height` / `card_width`.
 - Inverter model presets for status messages (e.g. Sunsynk, Lux, Goodwe, Solis, and others).
 
-## Planned expansions (this fork)
-
-- More animated energy flows beyond the stock diagram.
-- House vs EV/car load split.
-- Large house loads (heat pump, water heater, …) with icons.
-- Configurable / addable icons.
-
-See [`docs/powerflow-expansions/config-sketch.md`](docs/powerflow-expansions/config-sketch.md).
+See [`docs/powerflow-expansions/config-sketch.md`](docs/powerflow-expansions/config-sketch.md) and [`docs/configuration.md`](docs/configuration.md#photo-mode).
 
 ## Documentation
 
