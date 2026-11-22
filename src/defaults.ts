@@ -153,4 +153,17 @@ export default {
 		navigate: '',
 		invert_flow: false,
 	},
+	flows: {
+		extras: [],
+	},
+	load_groups: {
+		house_entity: '',
+		car_entity: '',
+		show_split: false,
+		house_name: 'House',
+		car_name: 'Cars',
+	},
+	large_loads: [],
+	car_loads: [],
+	icons: {},
 };

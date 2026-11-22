@@ -12,13 +12,14 @@ import { getCompactLayoutIconConfigs } from '../../shared/load/icon-configs';
 import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 import { renderPath } from '../../../helpers/render-path';
 import { renderCircle } from '../../../helpers/render-circle';
+import { renderLoadGroupElements } from '../../shared/load/load-groups-elements';
 
 export const renderLoadElements = (
 	data: DataDto,
 	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
-		additionalLoad,
+		additionalLoad: additionalLoadRaw,
 		largeFont,
 		dynamicColourEssentialLoad1,
 		dynamicColourEssentialLoad2,
@@ -32,7 +33,11 @@ export const renderLoadElements = (
 		solarColour,
 		batteryColour,
 		essentialPower,
+		showLoadSplit,
 	} = data;
+
+	// Hide legacy essential-load chips while the house/cars split owns that area.
+	const additionalLoad = showLoadSplit ? 0 : additionalLoadRaw;
 
 	const {
 		auto_scale,
@@ -51,9 +56,13 @@ export const renderLoadElements = (
 		dynamic_colour,
 	} = config.load;
 
+	// When the house/cars split is active, keep the Load group further left so
+	// nested child chips fit inside the wide viewBox (720) instead of clipping.
+	const loadGroupX = config.wide ? (showLoadSplit ? '8%' : '30%') : '0%';
+
 	return html`
 		<!-- Load Elements -->
-		<svg id="Load" style="overflow: visible" x="${config.wide ? '30%' : '0%'}">
+		<svg id="Load" style="overflow: visible" x="${loadGroupX}">
 			<rect
 				x="304"
 				y="203.5"
@@ -526,12 +535,14 @@ export const renderLoadElements = (
 			</svg>
 			<svg
 				id="Esential-Load5"
-				style="overflow: visible; display: ${[5, 6].includes(additionalLoad)
-					? config.wide ||
-						(!config.wide && [1, 2, 3].includes(config.solar.mppts))
-						? 'inline'
-						: 'none'
-					: `none`};"
+				style="overflow: visible; display: ${
+					[5, 6].includes(additionalLoad)
+						? config.wide ||
+							(!config.wide && [1, 2, 3].includes(config.solar.mppts))
+							? 'inline'
+							: 'none'
+						: `none`
+				};"
 				x="${config.wide ? '-5%' : '-7.35%'}"
 			>
 				<rect
@@ -593,12 +604,14 @@ export const renderLoadElements = (
 			</svg>
 			<svg
 				id="Esential-Load6"
-				style="overflow: visible; display: ${[6].includes(additionalLoad)
-					? config.wide ||
-						(!config.wide && [1, 2, 3].includes(config.solar.mppts))
-						? 'inline'
-						: 'none'
-					: `none`};"
+				style="overflow: visible; display: ${
+					[6].includes(additionalLoad)
+						? config.wide ||
+							(!config.wide && [1, 2, 3].includes(config.solar.mppts))
+							? 'inline'
+							: 'none'
+						: `none`
+				};"
 				x="${config.wide ? '-5%' : '-7.35%'}"
 			>
 				<rect
@@ -662,7 +675,7 @@ export const renderLoadElements = (
 				'daily_load',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '365' : '412',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '189' : '282.1',
-				!data.loadShowDaily,
+				showLoadSplit || !data.loadShowDaily,
 				'st3 left-align',
 				loadColour,
 				config.load.label_daily_load || localize('common.daily_load'),
@@ -687,8 +700,9 @@ export const renderLoadElements = (
 						}${auto_scale ? '' : ` ${UnitOfPower.WATT}`}`
 					: '0',
 			)}
-			${config.inverter.three_phase && config.entities?.load_power_L1
-				? svg`<a
+			${
+				config.inverter.three_phase && config.entities?.load_power_L1
+					? svg`<a
 							href="#"
 							@click=${(e: Event) => Utils.handlePopup(e, config.entities.load_power_L1)}
 						>
@@ -701,9 +715,11 @@ export const renderLoadElements = (
 								pointer-events="all"
 							/>
 						</a>`
-				: ''}
-			${config.inverter.three_phase && config.entities?.load_power_L2
-				? svg`<a
+					: ''
+			}
+			${
+				config.inverter.three_phase && config.entities?.load_power_L2
+					? svg`<a
 							href="#"
 							@click=${(e: Event) => Utils.handlePopup(e, config.entities.load_power_L2)}
 						>
@@ -716,9 +732,11 @@ export const renderLoadElements = (
 								pointer-events="all"
 							/>
 						</a>`
-				: ''}
-			${config.inverter.three_phase && config.entities?.load_power_L3
-				? svg`<a
+					: ''
+			}
+			${
+				config.inverter.three_phase && config.entities?.load_power_L3
+					? svg`<a
 							href="#"
 							@click=${(e: Event) => Utils.handlePopup(e, config.entities.load_power_L3)}
 						>
@@ -731,7 +749,8 @@ export const renderLoadElements = (
 								pointer-events="all"
 							/>
 						</a>`
-				: ''}
+					: ''
+			}
 			<svg id="load-flow">
 				${renderPath(
 					'es-line',
@@ -769,11 +788,14 @@ export const renderLoadElements = (
 					config.load.invert_flow,
 				)}
 			</svg>
-			<svg id="load-flow1">
+			<svg
+				id="load-flow1"
+				style="display: ${showLoadSplit ? 'none' : 'inline'};"
+			>
 				${renderPath(
 					'es-line1',
 					'M 374 218.5 L 402.38 218.5',
-					true,
+					!showLoadSplit,
 					dynamic_colour ? flowColour : loadColour,
 					data.loadLineWidth,
 				)}
@@ -783,7 +805,7 @@ export const renderLoadElements = (
 						2 + data.loadLineWidth + Math.max(data.minLineWidth - 2, 0),
 						8,
 					),
-					essentialPower === 0 || essentialPower < 0
+					showLoadSplit || essentialPower === 0 || essentialPower < 0
 						? 'transparent'
 						: `${dynamic_colour ? flowColour : loadColour}`,
 					data.durationCur['load'],
@@ -797,7 +819,7 @@ export const renderLoadElements = (
 						2 + data.loadLineWidth + Math.max(data.minLineWidth - 2, 0),
 						8,
 					),
-					essentialPower === 0 || essentialPower > 0
+					showLoadSplit || essentialPower === 0 || essentialPower > 0
 						? 'transparent'
 						: `${dynamic_colour ? flowColour : loadColour}`,
 					data.durationCur['load'],
@@ -829,9 +851,12 @@ export const renderLoadElements = (
 			)}
 			<a
 				href="#"
-				@click=${config.load?.navigate
-					? (e) => Utils.handleNavigation(e, config.load.navigate)
-					: null}
+				@click=${
+					config.load?.navigate
+						? (e) => Utils.handleNavigation(e, config.load.navigate)
+						: null
+				}
+				style="display: ${showLoadSplit ? 'none' : 'inline'};"
 			>
 				<svg
 					id="essen"
@@ -840,6 +865,7 @@ export const renderLoadElements = (
 					width="${data.essIconSize === 1 ? '75' : '79'}"
 					height="${data.essIconSize === 1 ? '75' : '79'}"
 					viewBox="0 0 24 24"
+					display="${showLoadSplit ? 'none' : 'inline'}"
 				>
 					<defs>
 						<linearGradient
@@ -851,31 +877,35 @@ export const renderLoadElements = (
 						>
 							<stop
 								offset="0%"
-								stop-color="${data.gridPercentage > 0
-									? data.gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? data.gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.gridPercentage > 0
-									? data.gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? data.gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
@@ -890,20 +920,24 @@ export const renderLoadElements = (
 					/>
 				</svg>
 			</a>
+			${renderLoadGroupElements(data, config, 'compact')}
 			${createTextWithPopup(
 				'daily_load_value',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '365' : '412',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '175' : '267.9',
-				!data.loadShowDaily || !data.stateDayLoadEnergy.isValid(),
+				showLoadSplit ||
+					!data.loadShowDaily ||
+					!data.stateDayLoadEnergy.isValid(),
 				'st10 left-align',
 				loadColour,
 				data.stateDayLoadEnergy?.toPowerString(true, data.decimalPlacesEnergy),
 				(e) => Utils.handlePopup(e, config.entities.day_load_energy_84),
 				true,
 			)}
-			${config.entities?.essential_power &&
-			config.entities.essential_power !== 'none'
-				? svg`
+			${
+				config.entities?.essential_power &&
+				config.entities.essential_power !== 'none'
+					? svg`
                     ${createTextWithPopup(
 											'ess_power',
 											340.1,
@@ -917,7 +951,7 @@ export const renderLoadElements = (
 											(e) =>
 												Utils.handlePopup(e, config.entities.essential_power),
 										)}`
-				: svg`
+					: svg`
                     ${renderText(
 											'ess_power',
 											340.1,
@@ -928,24 +962,28 @@ export const renderLoadElements = (
 											auto_scale
 												? `${Utils.convertValue(essentialPower, decimalPlaces) || 0}`
 												: `${essentialPower || 0} ${UnitOfPower.WATT}`,
-										)}`}
-			${guard(
-				[
-					data.additionalLoad,
-					data.showAux,
-					data.iconEssentialLoad1,
-					data.iconEssentialLoad2,
-					// Include dynamic colours so icon fill updates when they change
-					data.dynamicColourEssentialLoad1,
-					data.dynamicColourEssentialLoad2,
-				],
-				() =>
-					repeat(
-						getCompactLayoutIconConfigs(data),
-						(iconConfig) => iconConfig.id,
-						(iconConfig) => renderStaticLoadIcon(data, iconConfig),
-					),
-			)}
+										)}`
+			}
+			${
+				showLoadSplit
+					? ''
+					: guard(
+							[
+								data.additionalLoad,
+								data.showAux,
+								data.iconEssentialLoad1,
+								data.iconEssentialLoad2,
+								data.dynamicColourEssentialLoad1,
+								data.dynamicColourEssentialLoad2,
+							],
+							() =>
+								repeat(
+									getCompactLayoutIconConfigs(data),
+									(iconConfig) => iconConfig.id,
+									(iconConfig) => renderStaticLoadIcon(data, iconConfig),
+								),
+						)
+			}
 		</svg>
 	`;
 };

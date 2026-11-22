@@ -134,6 +134,26 @@ export const getDynamicStyles = (data) => html`
 			--mdc-icon-size: 36px;
 		}
 
+		.loadgroup-house-icon {
+			color: ${data.houseColour} !important;
+			--mdc-icon-size: 32px;
+		}
+
+		.loadgroup-car-icon {
+			color: ${data.carColour} !important;
+			--mdc-icon-size: 32px;
+		}
+
+		.loadgroup-house-load-icon {
+			color: ${data.loadColour} !important;
+			--mdc-icon-size: 20px;
+		}
+
+		.loadgroup-car-load-icon {
+			color: ${data.loadColour} !important;
+			--mdc-icon-size: 20px;
+		}
+
 		.aux-icon {
 			color: ${data.auxDynamicColour} !important;
 			--mdc-icon-size: 70px;

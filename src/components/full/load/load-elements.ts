@@ -12,6 +12,7 @@ import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 import { renderIcon } from '../../../helpers/render-icon';
 import { renderPath } from '../../../helpers/render-path';
 import { renderCircle } from '../../../helpers/render-circle';
+import { renderLoadGroupElements } from '../../shared/load/load-groups-elements';
 
 export const renderLoadElements = (
 	data: DataDto,
@@ -19,7 +20,7 @@ export const renderLoadElements = (
 ) => {
 	const {
 		showAux,
-		additionalLoad,
+		additionalLoad: additionalLoadRaw,
 		largeFont,
 		dynamicColourEssentialLoad1,
 		dynamicColourEssentialLoad2,
@@ -34,7 +35,11 @@ export const renderLoadElements = (
 		gridColour,
 		batteryColour,
 		essentialPower,
+		showLoadSplit,
 	} = data;
+
+	// Hide legacy essential-load chips while the house/cars split owns that area.
+	const additionalLoad = showLoadSplit ? 0 : additionalLoadRaw;
 
 	const {
 		auto_scale,
@@ -53,21 +58,20 @@ export const renderLoadElements = (
 		dynamic_colour,
 	} = config.load;
 
+	const loadGroupX = config.wide ? (showLoadSplit ? '8%' : '30%') : '3%';
+
 	return html`
 		<!-- Load Elements -->
-		<svg
-			id="Load"
-			style="overflow: visible;"
-			x="${config.wide ? '30%' : '3%'}"
-			y="2.5%"
-		>
+		<svg id="Load" style="overflow: visible;" x="${loadGroupX}" y="2.5%">
 			<svg
 				id="es-load5"
-				style="overflow: visible; display: ${[5, 6].includes(additionalLoad)
-					? config.wide || !config.load.show_aux
-						? 'inline'
-						: 'none'
-					: `none`};"
+				style="overflow: visible; display: ${
+					[5, 6].includes(additionalLoad)
+						? config.wide || !config.load.show_aux
+							? 'inline'
+							: 'none'
+						: `none`
+				};"
 				x="${config.wide ? '5%' : '-15.25%'}"
 			>
 				<rect
@@ -130,11 +134,13 @@ export const renderLoadElements = (
 			</svg>
 			<svg
 				id="es-load6"
-				style="overflow: visible; display: ${[6].includes(additionalLoad)
-					? config.wide || !config.load.show_aux
-						? 'inline'
-						: 'none'
-					: `none`};"
+				style="overflow: visible; display: ${
+					[6].includes(additionalLoad)
+						? config.wide || !config.load.show_aux
+							? 'inline'
+							: 'none'
+						: `none`
+				};"
 				x="${config.wide ? '5%' : '-15.25%'}"
 			>
 				<rect
@@ -257,9 +263,9 @@ export const renderLoadElements = (
 				fill="none"
 				stroke="${dynamicColourEssentialLoad3}"
 				pointer-events="all"
-				display="${!showAux && [3, 4, 5, 6].includes(additionalLoad)
-					? ''
-					: 'none'}"
+				display="${
+					!showAux && [3, 4, 5, 6].includes(additionalLoad) ? '' : 'none'
+				}"
 			/>
 			<rect
 				id="es-load4"
@@ -272,17 +278,18 @@ export const renderLoadElements = (
 				fill="none"
 				stroke="${dynamicColourEssentialLoad4}"
 				pointer-events="all"
-				display="${!showAux && [3, 4, 5, 6].includes(additionalLoad)
-					? ''
-					: 'none'}"
+				display="${
+					!showAux && [3, 4, 5, 6].includes(additionalLoad) ? '' : 'none'
+				}"
 			/>
 
 			${renderText(
 				'essential_name',
 				411,
 				157,
-				[0].includes(additionalLoad) ||
-					(!showAux && [1, 2].includes(additionalLoad)),
+				!showLoadSplit &&
+					([0].includes(additionalLoad) ||
+						(!showAux && [1, 2].includes(additionalLoad))),
 				'st3 st8',
 				loadColour,
 				config.load.essential_name || localize('common.essential'),
@@ -291,8 +298,9 @@ export const renderLoadElements = (
 				'ess_load',
 				!showAux && [4, 5, 6].includes(additionalLoad) ? 411 : 409,
 				130,
-				([1, 2].includes(additionalLoad) && showAux) ||
-					(!showAux && [4, 5, 6].includes(additionalLoad)),
+				!showLoadSplit &&
+					(([1, 2].includes(additionalLoad) && showAux) ||
+						(!showAux && [4, 5, 6].includes(additionalLoad))),
 				'st3 st8',
 				loadColour,
 				config.load.essential_name || localize('common.essential'),
@@ -346,7 +354,7 @@ export const renderLoadElements = (
 				'daily_load',
 				additionalLoad === 0 ? '377' : '238',
 				additionalLoad === 0 ? 71 : 93,
-				!data.loadShowDaily || showAux,
+				showLoadSplit || !data.loadShowDaily || showAux,
 				'st3 left-align',
 				loadColour,
 				config.load.label_daily_load || localize('common.daily_load'),
@@ -505,31 +513,35 @@ export const renderLoadElements = (
 						<linearGradient id="Lg-essen_aux" x1="0%" x2="0%" y1="100%" y2="0%">
 							<stop
 								offset="0%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
@@ -539,9 +551,11 @@ export const renderLoadElements = (
 						</linearGradient>
 					</defs>
 					<path
-						display="${[1, 2].includes(additionalLoad) && !showAux
-							? ''
-							: 'none'}"
+						display="${
+							!showLoadSplit && [1, 2].includes(additionalLoad) && !showAux
+								? ''
+								: 'none'
+						}"
 						fill="${dynamic_colour ? `url(#Lg-essen_aux)` : loadColour}"
 						d="${data.essIcon}"
 					/>
@@ -565,31 +579,35 @@ export const renderLoadElements = (
 						>
 							<stop
 								offset="0%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
@@ -599,9 +617,11 @@ export const renderLoadElements = (
 						</linearGradient>
 					</defs>
 					<path
-						display="${[1, 2].includes(additionalLoad) && showAux
-							? ''
-							: 'none'}"
+						display="${
+							!showLoadSplit && [1, 2].includes(additionalLoad) && showAux
+								? ''
+								: 'none'
+						}"
 						fill="${dynamic_colour ? `url(#Lg-essen_noaux)` : loadColour}"
 						d="${data.essIcon}"
 					/>
@@ -625,31 +645,35 @@ export const renderLoadElements = (
 						>
 							<stop
 								offset="0%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
@@ -659,9 +683,11 @@ export const renderLoadElements = (
 						</linearGradient>
 					</defs>
 					<path
-						display="${[4, 5, 6].includes(additionalLoad) && !showAux
-							? ''
-							: 'none'}"
+						display="${
+							!showLoadSplit && [4, 5, 6].includes(additionalLoad) && !showAux
+								? ''
+								: 'none'
+						}"
 						fill="${dynamic_colour ? `url(#Lg-essen_noaux_four)` : loadColour}"
 						d="${data.essIcon}"
 					/>
@@ -685,31 +711,35 @@ export const renderLoadElements = (
 						>
 							<stop
 								offset="0%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.gridPercentage > 0
-									? gridColour
-									: data.batteryPercentage > 0
-										? batteryColour
-										: solarColour}"
+								stop-color="${
+									data.gridPercentage > 0
+										? gridColour
+										: data.batteryPercentage > 0
+											? batteryColour
+											: solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
-								stop-color="${data.batteryPercentage > 0
-									? batteryColour
-									: solarColour}"
+								stop-color="${
+									data.batteryPercentage > 0 ? batteryColour : solarColour
+								}"
 							/>
 							<stop
 								offset="${data.gridPercentage + data.batteryPercentage}%"
@@ -719,41 +749,46 @@ export const renderLoadElements = (
 						</linearGradient>
 					</defs>
 					<path
-						display="${[1, 2, 3, 4, 5, 6].includes(additionalLoad)
-							? 'none'
-							: ''}"
+						display="${
+							showLoadSplit || [1, 2, 3, 4, 5, 6].includes(additionalLoad)
+								? 'none'
+								: ''
+						}"
 						fill="${dynamic_colour ? `url(#Lg-essen_default)` : loadColour}"
 						d="${data.essIcon}"
 					/>
 				</svg>
 			</a>
-			}
+			} ${renderLoadGroupElements(data, config, 'full')}
 			<!-- Render Static Icons e.g. Boiler, Aircon, Oven and Pump etc -->
-			${guard(
-				[
-					data.additionalLoad,
-					data.showAux,
-					data.iconEssentialLoad1,
-					data.iconEssentialLoad2,
-					data.iconEssentialLoad3,
-					data.iconEssentialLoad4,
-					data.iconEssentialLoad5,
-					data.iconEssentialLoad6,
-					// Include dynamic colours so icon fill updates when they change
-					data.dynamicColourEssentialLoad1,
-					data.dynamicColourEssentialLoad2,
-					data.dynamicColourEssentialLoad3,
-					data.dynamicColourEssentialLoad4,
-					data.dynamicColourEssentialLoad5,
-					data.dynamicColourEssentialLoad6,
-				],
-				() =>
-					repeat(
-						getFullLayoutIconConfigs(data),
-						(iconConfig) => iconConfig.id,
-						(iconConfig) => renderStaticLoadIcon(data, iconConfig),
-					),
-			)}
+			${
+				showLoadSplit
+					? ''
+					: guard(
+							[
+								data.additionalLoad,
+								data.showAux,
+								data.iconEssentialLoad1,
+								data.iconEssentialLoad2,
+								data.iconEssentialLoad3,
+								data.iconEssentialLoad4,
+								data.iconEssentialLoad5,
+								data.iconEssentialLoad6,
+								data.dynamicColourEssentialLoad1,
+								data.dynamicColourEssentialLoad2,
+								data.dynamicColourEssentialLoad3,
+								data.dynamicColourEssentialLoad4,
+								data.dynamicColourEssentialLoad5,
+								data.dynamicColourEssentialLoad6,
+							],
+							() =>
+								repeat(
+									getFullLayoutIconConfigs(data),
+									(iconConfig) => iconConfig.id,
+									(iconConfig) => renderStaticLoadIcon(data, iconConfig),
+								),
+						)
+			}
 
 			<g display="${[2, 4, 5, 6].includes(additionalLoad) ? 'inline' : 'none'}">
 				${renderIcon(
@@ -816,7 +851,10 @@ export const renderLoadElements = (
 				'daily_load_value',
 				additionalLoad === 0 ? 377 : 238,
 				additionalLoad === 0 ? 57 : 80,
-				!data.loadShowDaily || showAux || !data.stateDayLoadEnergy.isValid(),
+				showLoadSplit ||
+					!data.loadShowDaily ||
+					showAux ||
+					!data.stateDayLoadEnergy.isValid(),
 				'st10 left-align',
 				loadColour,
 				data.stateDayLoadEnergy.toPowerString(true, data.decimalPlacesEnergy),
@@ -887,9 +925,10 @@ export const renderLoadElements = (
 				)} ${data.stateEssentialLoad2Extra?.getUOM()}`,
 				(e) => Utils.handlePopup(e, config.entities.essential_load2_extra),
 			)}
-			${config.entities?.essential_power &&
-			config.entities.essential_power !== 'none'
-				? svg`
+			${
+				config.entities?.essential_power &&
+				config.entities.essential_power !== 'none'
+					? svg`
                     ${createTextWithPopup(
 											'ess_power',
 											270,
@@ -904,7 +943,7 @@ export const renderLoadElements = (
 												Utils.handlePopup(e, config.entities.essential_power),
 											false,
 										)}`
-				: svg`
+					: svg`
                     ${renderText(
 											'ess_power',
 											270,
@@ -916,7 +955,8 @@ export const renderLoadElements = (
 												? `${Utils.convertValue(essentialPower, decimalPlaces) || 0}`
 												: `${essentialPower || 0} ${UnitOfPower.WATT}`,
 											false,
-										)}`}
+										)}`
+			}
 			${createTextWithPopup(
 				'ess_load1_value',
 				409,
