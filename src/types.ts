@@ -251,6 +251,51 @@ export interface detailedPowerFlowCardConfig extends LovelaceCardConfig {
 		invert_flow: boolean;
 	};
 	entities: CardConfigEntities;
+	/** Extra named flow paths (future renderers). Empty / omitted = no change. */
+	flows?: {
+		extras?: Array<{
+			id: string;
+			entity: string;
+			colour?: string;
+			icon?: string;
+		}>;
+	};
+	/** Split essential load into house vs car sinks when enabled. */
+	load_groups?: {
+		house_entity?: string;
+		car_entity?: string;
+		show_split?: boolean;
+		house_name?: string;
+		car_name?: string;
+	};
+	/** Large house loads rendered as icon+power chips under the house sink. */
+	large_loads?: Array<{
+		id: string;
+		name: string;
+		entity: string;
+		icon?: string;
+		max_threshold?: number;
+	}>;
+	/** Individual vehicles rendered as icon+power chips under the cars sink. */
+	car_loads?: Array<{
+		id: string;
+		name: string;
+		entity: string;
+		icon?: string;
+		max_threshold?: number;
+	}>;
+	/** Free-form icon overrides keyed by node id (house, car, large_loads[].id, …). */
+	icons?: Record<string, string>;
+}
+
+export interface NamedLoadItem {
+	id: string;
+	name: string;
+	entity: string;
+	icon: string;
+	power: number;
+	colour: string;
+	state: CustomEntity;
 }
 
 export interface CardConfigEntities {
@@ -620,4 +665,16 @@ export interface DataDto {
 	customGridIconColour;
 	maximumSOC;
 	batteryCount;
+	/** True when house/car load split should render instead of the single essential sink. */
+	showLoadSplit: boolean;
+	housePower: number;
+	carPower: number;
+	houseColour: string;
+	carColour: string;
+	houseIcon: string;
+	carIcon: string;
+	houseName: string;
+	carName: string;
+	largeLoads: NamedLoadItem[];
+	carLoads: NamedLoadItem[];
 }

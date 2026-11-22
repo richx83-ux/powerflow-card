@@ -45,13 +45,26 @@ large_loads:
     entity: sensor.water_heater_power
     icon: mdi:water-boiler
 
+# Individual vehicles under the Cars sink (same chip shape as large_loads).
+car_loads:
+  - id: tesla
+    name: Tesla
+    entity: sensor.tesla_charge_power
+    icon: mdi:car-electric
+  - id: puma
+    name: Puma
+    entity: sensor.ford_puma_charge_power
+    icon: mdi:car
+
 # Free-form icon overrides / additions keyed by node id.
 # Merges with existing load1_icon … load6_icon and aux icons.
 icons:
   house: mdi:home
   car: mdi:ev-station
-  # heat_pump / water_heater keys match large_loads[].id
+  # heat_pump / water_heater / tesla keys match large_loads[].id / car_loads[].id
 ```
+
+Worked example: [`docs/examples/house-cars-load-split.yaml`](../examples/house-cars-load-split.yaml).
 
 ## TypeScript landing spot
 
@@ -81,18 +94,26 @@ large_loads?: Array<{
   max_threshold?: number;
 }>;
 
+car_loads?: Array<{
+  id: string;
+  name: string;
+  entity: string;
+  icon?: string;
+  max_threshold?: number;
+}>;
+
 icons?: Record<string, string>;
 ```
 
 Defaults: all omitted / empty — identical to upstream rendering.
 
-## Implementation order (follow-on PRs)
+## Implementation status
 
-1. Types + defaults + editor stubs (no visual change)
-2. House vs car split using `load_groups` (reuse essential-load layout slots)
-3. `large_loads` list renderer (cap visible count per card style)
-4. `icons` merge helper (single place for mdi/url resolution)
-5. `flows.extras` paths once layout space is defined
+1. ~~Types + defaults~~ (landed)
+2. ~~House vs car split using `load_groups`~~ (landed; reuses essential-load layout)
+3. ~~`large_loads` / `car_loads` list renderer~~ (cap 4 per side; prefer `wide: true`)
+4. ~~`icons` merge helper~~ (`resolveNodeIcon` in `src/helpers/load-groups.ts`)
+5. `flows.extras` paths once layout space is defined (still future)
 
 ## Compatibility
 

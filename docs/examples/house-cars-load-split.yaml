@@ -1,0 +1,91 @@
+# House vs cars load-flow split example for Detailed Power Flow Card
+# Prefer wide layout so vehicle / large-load chips sit beside the sinks.
+type: custom:detailed-power-flow-card
+cardstyle: full
+wide: true
+title: House & cars load split
+show_solar: true
+show_battery: true
+show_grid: true
+
+# Total load still comes from entities.essential_power (or calculated).
+# When load_groups.show_split is true and both house_entity + car_entity
+# are set, the essential sink splits into House and Cars branches.
+load_groups:
+  show_split: true
+  house_entity: sensor.house_load_power
+  car_entity: sensor.ev_total_charge_power
+  house_name: House
+  car_name: Cars
+
+# Large loads under the House sink (heat pump, immersion, etc.)
+large_loads:
+  - id: heat_pump
+    name: Heat Pump
+    entity: sensor.heat_pump_power
+    icon: mdi:heat-pump
+    max_threshold: 5000
+  - id: sunamp
+    name: Sunamp
+    entity: sensor.sunamp_power
+    icon: mdi:water-boiler
+
+# Individual vehicles under the Cars sink
+car_loads:
+  - id: tesla
+    name: Tesla
+    entity: sensor.tesla_charge_power
+    icon: mdi:car-electric
+  - id: puma
+    name: Puma
+    entity: sensor.ford_puma_charge_power
+    icon: mdi:car
+
+# Optional icon overrides (keys match house / car / large_loads[].id / car_loads[].id)
+icons:
+  house: mdi:home
+  car: mdi:ev-station
+  heat_pump: mdi:heat-pump
+  sunamp: mdi:water-boiler
+  tesla: mdi:car-electric
+  puma: mdi:car
+
+load:
+  colour: '#5fb6ad'
+  dynamic_colour: true
+  show_daily: true
+  auto_scale: true
+  # Legacy additional_loads chips are hidden while the split is active.
+  additional_loads: 0
+  show_aux: false
+
+solar:
+  mppts: 2
+  colour: '#ffa500'
+
+battery:
+  energy: 10000
+  shutdown_soc: 20
+  colour: '#ffc0cb'
+
+grid:
+  show_nonessential: false
+  colour: '#5490c2'
+
+entities:
+  inverter_power_175: sensor.inverter_power
+  inverter_status_59: sensor.inverter_status
+  essential_power: sensor.total_load_power
+  day_load_energy_84: sensor.daily_load_energy
+  battery_soc_184: sensor.battery_soc
+  battery_power_190: sensor.battery_power
+  battery_current_191: sensor.battery_current
+  grid_ct_power_172: sensor.grid_ct_power
+  grid_power_169: sensor.grid_power
+  pv1_power_186: sensor.pv1_power
+  pv2_power_187: sensor.pv2_power
+  day_pv_energy_108: sensor.daily_pv_energy
+  day_battery_charge_70: sensor.daily_battery_charge
+  day_battery_discharge_71: sensor.daily_battery_discharge
+  day_grid_import_76: sensor.daily_grid_import
+  day_grid_export_77: sensor.daily_grid_export

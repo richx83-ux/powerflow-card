@@ -204,6 +204,21 @@ These attributes are only needed if `show_solar` is set to `true`.
 | invert_flow:         | Optional    | `false`           | Inverts the animated flow.                                                                                                                                                                                                                                                                                                                                                                                 |
 | label_daily_load:    | Optional    |                   | Set custom text for the "DAILY LOAD" label that is displayed.                                                                                                                                                                                                                                                                                                                                              |
 
+### House / cars load split
+
+Additive options that split the essential load sink into **House** and **Cars** branches. Omit them to keep the classic single essential sink. Prefer `wide: true` so vehicle and large-load chips have room. Full worked example: [`docs/examples/house-cars-load-split.yaml`](examples/house-cars-load-split.yaml). Sketch: [`docs/powerflow-expansions/config-sketch.md`](powerflow-expansions/config-sketch.md).
+
+| Attribute / block   | Requirement | Default | Description |
+| ------------------- | ----------- | ------- | ----------- |
+| `load_groups.show_split` | Optional | `false` | When `true` **and** both `house_entity` and `car_entity` are set, draw House and Cars sinks from the total load node. Legacy `load.additional_loads` chips are hidden while the split is active. |
+| `load_groups.house_entity` | Optional | | Power sensor for the house branch. |
+| `load_groups.car_entity` | Optional | | Power sensor for the cars branch. |
+| `load_groups.house_name` | Optional | `House` | Label under the house sink. |
+| `load_groups.car_name` | Optional | `Cars` | Label under the cars sink. |
+| `large_loads` | Optional | `[]` | List of `{ id, name, entity, icon?, max_threshold? }` chips under House (max 4 shown). |
+| `car_loads` | Optional | `[]` | Same chip shape under Cars for individual vehicles (max 4 shown). |
+| `icons` | Optional | `{}` | Map of node id → `mdi:*` (or image URL). Keys: `house`, `car`, and any `large_loads[].id` / `car_loads[].id`. |
+
 ### Grid
 
 | Attribute              | Requirement | Default         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |

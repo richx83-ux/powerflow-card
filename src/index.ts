@@ -46,6 +46,7 @@ import {
 	CustomEntity,
 } from './inverters/dto/custom-entity';
 import { icons } from './helpers/icons';
+import { buildLoadGroupSnapshot } from './helpers/load-groups';
 
 console.groupCollapsed(
 	`%c ⚡ DETAILED-POWER-FLOW-CARD %c ${localize('common.version')}: ${CARD_VERSION} `,
@@ -2521,6 +2522,25 @@ export class DetailedPowerFlowCard extends LitElement {
 					: batteryShutdown2;
 				break;
 		}
+		const loadGroupSnapshot = buildLoadGroupSnapshot(
+			config,
+			this.hass?.states as Record<string, unknown> | undefined,
+			(id) => {
+				this._trackedEntityIds.add(id);
+				const cur = this.hass?.states?.[id];
+				if (cur) {
+					this._lastEntityStates.set(id, String(cur.state ?? ''));
+				}
+			},
+			(power, maxThreshold) =>
+				this.calculateEssentialLoadColour(
+					power,
+					threshold,
+					maxThreshold ?? Infinity,
+				) || loadColour,
+			invertLoad,
+		);
+
 		/**
 		 * The current structure of this data object is intentional, but it is considered temporary.
 		 * There is a need to evaluate the data being passed, as there might be duplication.
@@ -2765,6 +2785,7 @@ export class DetailedPowerFlowCard extends LitElement {
 			customGridIconColour,
 			maximumSOC,
 			batteryCount,
+			...loadGroupSnapshot,
 		};
 
 		let template: TemplateResult | null = null;
