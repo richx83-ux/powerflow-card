@@ -7,6 +7,19 @@ An animated Home Assistant card to emulate the power flow that's shown on the Su
 [![Community Forum](https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge)](https://community.home-assistant.io/t/sunsynk-deye-inverter-power-flow-card/562933/1)
 <a href="https://www.buymeacoffee.com/slipx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="28" width="120"></a>
 
+## Powerflow Card fork (`richx83-ux/powerflow-card`)
+
+This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design, documentation, and releases; this fork is where Powerflow-specific expansions will land.
+
+### Planned expansions
+
+- **More energy flows** — additional animated paths beyond the stock solar / battery / grid / load / aux diagram.
+- **House vs car split** — show household load and EV/charger load as separate sinks when both sensors are configured.
+- **Large house loads** — break out heat pumps, water heaters, and similar high draws with their own power + icon.
+- **Configurable icons** — override or add icons for those nodes (MDI names or image URLs).
+
+See [`docs/powerflow-expansions/config-sketch.md`](docs/powerflow-expansions/config-sketch.md) for the smallest config/API surface proposed for follow-on work. Until those options are implemented, behaviour matches upstream.
+
 ## Documentation
 
 Refer to [https://slipx06.github.io/sunsynk-power-flow-card/index.html](https://slipx06.github.io/sunsynk-power-flow-card/index.html)
