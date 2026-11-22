@@ -38,34 +38,31 @@ large_loads:
   - id: heat_pump
     name: Heat pump
     entity: sensor.heat_pump_power
-    icon: mdi:heat-pump # official MDI (mdi:snowflake remaps here)
+    # id selects outdoor-unit silhouette (mdi:snowflake remaps here)
     max_threshold: 5000 # optional colour trip
   - id: sunamp
     name: Sunamp
     entity: sensor.sunamp_power
-    icon: mdi:propane-tank # cylindrical tank (mdi:water-boiler remaps)
+    # id selects cylindrical thermal-store silhouette
 
 # Individual vehicles under the Cars sink (same chip shape as large_loads).
 car_loads:
   - id: tesla
     name: Tesla
     entity: sensor.tesla_charge_power
-    icon: mdi:car-side # (mdi:ev-station / mdi:car-electric remap)
+    # id → Model Y–style silhouette (no logo URL needed)
   - id: puma
     name: Puma
     entity: sensor.ford_puma_charge_power
-    icon: mdi:car-side
+    # id → compact crossover silhouette
 
-# Optional — known ids use official @mdi/svg glyphs.
-# Image URLs still override. Keys match large_loads[].id / car_loads[].id.
+# Optional — known ids use original vector art. Image URLs still override.
 icons:
-  house: mdi:home-outline
+  house: mdi:home
   car: mdi:car-side
-  heat_pump: mdi:heat-pump
-  sunamp: mdi:propane-tank
 ```
 
-**Modern MDI (shipped as official path data):** `house` → `mdi:home-outline`; `car`/`cars`/`tesla`/`puma` → `mdi:car-side`; `heat_pump` → `mdi:heat-pump`; `sunamp`/`tank`/`water_heater` → `mdi:propane-tank`. Legacy keys remap automatically.
+**Custom silhouettes (by id):** `tesla` → Model Y–style fastback; `puma` → upright compact crossover; `heat_pump` → outdoor condenser; `sunamp`/`tank` → cylindrical store; `car`/`house` hubs match the same filled style. Legacy MDI remaps; no brand logos.
 
 Worked example: [`docs/examples/house-cars-load-split.yaml`](../examples/house-cars-load-split.yaml).
 
@@ -116,7 +113,7 @@ Defaults: all omitted / empty — identical to upstream rendering.
 2. ~~House vs car split using `load_groups`~~ (landed; reuses essential-load layout)
 3. ~~`large_loads` / `car_loads` list renderer~~ (cap 4 per side; prefer `wide: true`)
 4. ~~`icons` merge helper~~ (`resolveNodeIcon` in `src/helpers/load-groups.ts`)
-5. ~~Modern official MDI split icons~~ (`src/helpers/load-split-icons.ts`; `@mdi/svg` glyphs + legacy remaps)
+5. ~~Custom vector split icons~~ (`src/helpers/load-split-icons.ts`; id-wired silhouettes + legacy MDI remaps)
 6. `flows.extras` paths once layout space is defined (still future)
 
 ## Compatibility

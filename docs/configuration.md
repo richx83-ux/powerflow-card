@@ -217,21 +217,22 @@ Additive options that split the essential load sink into **House** and **Cars** 
 | `load_groups.car_name` | Optional | `Cars` | Label under the cars hub. |
 | `large_loads` | Optional | `[]` | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4). |
 | `car_loads` | Optional | `[]` | Nested chips under Cars only for individual vehicles (max 4). |
-| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids use official Material Design Icons** (see below); image URLs still override. |
+| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids use card-shipped original vector silhouettes** (see below); image URLs still override. |
 
-### Modern split icons (official MDI)
+### Custom split icons (by load id)
 
-When `load_groups.show_split` is on, these node **ids** render official `@mdi/svg` glyphs (same art as HA’s `mdi:*` set):
+When `load_groups.show_split` is on, these node **ids** render original vector silhouettes (no brand logos — vehicle *shape* only):
 
-| Node id | Official MDI glyph | Suggested YAML |
+| Node id | Artwork | Suggested YAML |
 | --- | --- | --- |
-| `house` | `mdi:home-outline` | `icons.house: mdi:home-outline` or omit |
-| `car` / `cars` | `mdi:car-side` | `icons.car: mdi:car-side` or omit |
-| `tesla` / `puma` | `mdi:car-side` | `icon: mdi:car-side` — **not** `mdi:ev-station` |
-| `heat_pump` / `heatpump` | `mdi:heat-pump` | `icon: mdi:heat-pump` — **not** `mdi:snowflake` |
-| `sunamp` / `tank` / `water_heater` | `mdi:propane-tank` | `icon: mdi:propane-tank` (cylindrical tank; remaps from `mdi:water-boiler`) |
+| `tesla` | Model Y–style fastback crossover silhouette | `id: tesla` (icon optional) |
+| `puma` | Compact crossover silhouette (Puma-like stance) | `id: puma` (icon optional) |
+| `heat_pump` / `heatpump` | Outdoor condenser with fan grille | `id: heat_pump` — **not** `mdi:snowflake` |
+| `sunamp` / `tank` / `water_heater` | Cylindrical thermal store | `id: sunamp` |
+| `car` / `cars` | Generic modern EV hatch (Cars hub) | omit or any remapped MDI |
+| `house` | Modern home (House hub) | omit or any remapped MDI |
 
-Legacy keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, `mdi:car`, `mdi:home`, …) remap to the matching modern glyph automatically. To force custom art, set an **image URL** (`https://…`, `/local/…`, or `data:…`) on `icon:` or under `icons:`.
+Icons are chosen from **`id`**, so YAML does not need brand logo URLs. Legacy MDI keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, …) remap to the matching custom glyph. To force custom art, set an **image URL** on `icon:` or under `icons:`.
 
 ### Grid
 

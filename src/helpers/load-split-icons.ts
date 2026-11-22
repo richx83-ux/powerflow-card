@@ -1,51 +1,175 @@
 /**
- * Modern Material Design Icons for house/cars load split.
+ * Original vector icons for house/cars load split.
  *
- * Uses official @mdi/svg path data (not hand-drawn shapes) so icons match
- * Home Assistant density. Known node ids and legacy bad YAML keys
- * (mdi:ev-station, mdi:snowflake, mdi:water-boiler as heat-pump stand-in, etc.)
- * remap to these modern icons. Image URLs still override.
+ * Distinct silhouettes wired by load id (tesla, puma, heat_pump, sunamp, …).
+ * No brand logos/badges — vehicle *shape* only. Legacy MDI keys remap here;
+ * image URLs still override.
  */
 
-export type LoadSplitSvgKind = 'car' | 'house' | 'heat_pump' | 'tank';
+export type LoadSplitSvgKind =
+	| 'car'
+	| 'tesla'
+	| 'puma'
+	| 'house'
+	| 'heat_pump'
+	| 'tank';
 
-/** Canonical modern MDI keys for split nodes. */
-export const loadSplitMdiIcons: Record<LoadSplitSvgKind, string> = {
-	car: 'mdi:car-side',
-	house: 'mdi:home-outline',
-	heat_pump: 'mdi:heat-pump',
-	tank: 'mdi:propane-tank',
+export type LoadSplitPath = {
+	d: string;
+	/** Default nonzero; use evenodd for cutouts (wheels, windows, grille). */
+	fillRule?: 'evenodd' | 'nonzero';
+};
+
+export type LoadSplitIconDef = {
+	paths: LoadSplitPath[];
+	/** Optional ha-icon fallback if path render unavailable. */
+	mdiFallback: string;
 };
 
 /**
- * Official Material Design Icons path data (viewBox 0 0 24 24).
- * Source: @mdi/svg 7.4.47 — same glyphs HA ships via mdi:*.
+ * Original filled silhouettes (viewBox 0 0 24 24), tuned for ~22–28px on dark HA.
  */
-const MDI_CAR_SIDE =
-	'M16,6L19,10H21C22.11,10 23,10.89 23,12V15H21A3,3 0 0,1 18,18A3,3 0 0,1 15,15H9A3,3 0 0,1 6,18A3,3 0 0,1 3,15H1V12C1,10.89 1.89,10 3,10L6,6H16M10.5,7.5H6.75L4.86,10H10.5V7.5M12,7.5V10H17.14L15.25,7.5H12M6,13.5A1.5,1.5 0 0,0 4.5,15A1.5,1.5 0 0,0 6,16.5A1.5,1.5 0 0,0 7.5,15A1.5,1.5 0 0,0 6,13.5M18,13.5A1.5,1.5 0 0,0 16.5,15A1.5,1.5 0 0,0 18,16.5A1.5,1.5 0 0,0 19.5,15A1.5,1.5 0 0,0 18,13.5Z';
+export const loadSplitIcons: Record<LoadSplitSvgKind, LoadSplitIconDef> = {
+	/** Cars hub — modern EV hatch, generic (not Y / Puma). */
+	car: {
+		mdiFallback: 'mdi:car-side',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					'M2.4 14.1h1.1l.4-2.1c.25-1.25 1.05-2.15 2.25-2.55L9.2 8.4' +
+					'c1.05-.4 2.2-.55 3.35-.4l3.3.5c1.15.2 2.05.85 2.55 1.85l1.15 2.35h1.35' +
+					'c.55 0 1 .4 1.05.95l.15 1.35c.05.45-.3.85-.75.85h-.85c-.15 1.35-1.3 2.4-2.7 2.4' +
+					's-2.55-1.05-2.7-2.4H9.9c-.15 1.35-1.3 2.4-2.7 2.4S4.65 18.4 4.5 17.05H3.2' +
+					'c-.5 0-.9-.4-.9-.9v-.95c0-.55.45-1 1-1.1z' +
+					'M6.75 15.35a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7zm9.3 0a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7z' +
+					'M9.05 9.55l2.55-.75c.7-.2 1.4-.2 2.05 0l2.2.55c.35.1.5.5.35.8l-.7 1.45' +
+					'c-.1.2-.3.35-.55.35H9.95c-.35 0-.6-.35-.5-.7l.6-1.7z',
+			},
+		],
+	},
 
-const MDI_HOME_OUTLINE =
-	'M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22';
+	/** Tesla Model Y — low sleek crossover, continuous fastback slope. */
+	tesla: {
+		mdiFallback: 'mdi:car-side',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					'M1.8 14.35h1.05l.35-1.85C3.45 10.9 4.4 9.85 5.85 9.35L8.9 8.2' +
+					'c1.35-.5 2.85-.6 4.25-.25l2.9.75c1.2.3 2.1 1.05 2.55 2.15l.85 2.05h1.4' +
+					'c.5 0 .9.4.95.9l.2 1.45c.05.4-.25.75-.65.75h-.7c-.1 1.4-1.25 2.5-2.7 2.5' +
+					's-2.6-1.1-2.7-2.5H9.55c-.1 1.4-1.25 2.5-2.7 2.5s-2.6-1.1-2.7-2.5H2.55' +
+					'c-.45 0-.8-.35-.85-.8v-1.05c0-.5.4-.9.9-.95h.2z' +
+					'M6.85 15.55a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8zm9.5 0a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8z' +
+					'M8.6 9.35l3.1-.85c.85-.25 1.75-.2 2.55.15l2.05.85c.3.12.42.48.28.76l-.85 1.65' +
+					'c-.1.2-.3.32-.52.32H9.35c-.4 0-.68-.4-.55-.78l.8-2.1z',
+			},
+		],
+	},
 
-const MDI_HEAT_PUMP =
-	'M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M12.75 7.08C13.57 7.2 14.32 7.5 14.95 8L12.75 10.19V7.08M11.25 7.08V10.19L9.05 8C9.68 7.5 10.43 7.2 11.25 7.08M8 9.05L10.19 11.25H7.08C7.2 10.43 7.5 9.68 8 9.05M7.08 12.75H10.19L8 14.95C7.5 14.32 7.2 13.57 7.08 12.75M11.25 16.92C10.43 16.8 9.68 16.5 9.05 16L11.25 13.81V16.92M12 13C11.45 13 11 12.55 11 12S11.45 11 12 11 13 11.45 13 12 12.55 13 12 13M12.75 16.92V13.81L14.95 16C14.32 16.5 13.57 16.8 12.75 16.92M16 14.95L13.81 12.75H16.92C16.8 13.57 16.5 14.32 16 14.95M13.81 11.25L16 9.05C16.5 9.69 16.8 10.44 16.92 11.25H13.81Z';
+	/** Ford Puma — taller compact crossover, more upright arched rear. */
+	puma: {
+		mdiFallback: 'mdi:car-side',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					'M2.1 14.2h1.15l.3-1.55c.3-1.45 1.25-2.35 2.65-2.7L8.5 9.15' +
+					'c.7-.2 1.45-.25 2.2-.1l1.5.35 1.85.15c.95.1 1.7.55 2.2 1.25l.55.8 1.35.15' +
+					'c.85.1 1.5.8 1.5 1.65v.85h.55c.5 0 .9.4.9.9v.85c0 .5-.4.9-.9.9h-.55' +
+					'c-.15 1.3-1.25 2.3-2.6 2.3s-2.45-1-2.6-2.3H9.35c-.15 1.3-1.25 2.3-2.6 2.3' +
+					's-2.45-1-2.6-2.3H2.85c-.5 0-.9-.4-.9-.9v-.95c0-.5.4-.9.9-.95h.25z' +
+					'M6.75 15.45a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7zm9.1 0a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7z' +
+					'M8.35 9.95l2.4-.55c.55-.12 1.15-.1 1.7.1l1.35.5c.55.2.95.55 1.15 1.05l.35.85' +
+					'c.08.2-.05.42-.25.48l-1.55.4c-.15.04-.3-.05-.35-.2l-.25-.7c-.1-.3-.4-.5-.7-.5H9.1' +
+					'c-.4 0-.7-.35-.6-.72l.85-1.71z',
+			},
+		],
+	},
 
-const MDI_PROPANE_TANK =
-	'M4 15V18C4 20.21 5.79 22 8 22H16C18.21 22 20 20.21 20 18V15H4M20 13V10C20 8.14 18.72 6.59 17 6.14V4C17 2.9 16.1 2 15 2H9C7.9 2 7 2.9 7 4V6.14C5.28 6.59 4 8.14 4 10V13H20M9 4H15V6H13C13 5.45 12.55 5 12 5S11 5.45 11 6H9V4Z';
+	/** House hub — modern filled home with door cutout. */
+	house: {
+		mdiFallback: 'mdi:home',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					'M12 2.6L2.4 11.2c-.35.3-.15.9.3.9H5.2v8.1c0 .55.45 1 1 1h11.6c.55 0 1-.45 1-1' +
+					'v-8.1h2.5c.45 0 .65-.6.3-.9L12 2.6zM10.4 15.6h3.2v5.6h-3.2z',
+			},
+		],
+	},
 
+	/**
+	 * Outdoor heat-pump / condenser unit: cabinet, feet, circular fan grille.
+	 */
+	heat_pump: {
+		mdiFallback: 'mdi:heat-pump',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					// outer cabinet
+					'M3.6 4h16.8c.77 0 1.4.63 1.4 1.4v12.3c0 .77-.63 1.4-1.4 1.4H17.8v1.5h-1.7v-1.5H7.9v1.5H6.2v-1.5H3.6' +
+					'c-.77 0-1.4-.63-1.4-1.4V5.4c0-.77.63-1.4 1.4-1.4z' +
+					// fan outer disc hole (recess)
+					'M12 7.35a4.15 4.15 0 1 0 0 8.3 4.15 4.15 0 0 0 0-8.3zm0 1.35a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6z',
+			},
+			// hub + four blades (solid on top of grille)
+			{
+				d:
+					'M12 10.55a1.45 1.45 0 1 0 0 2.9 1.45 1.45 0 0 0 0-2.9z' +
+					'M11.55 8.2h.9v2.05h-.9zm0 5.55h.9V15.8h-.9z' +
+					'M8.2 11.55h2.05v.9H8.2zm5.55 0H15.8v.9h-2.05z',
+			},
+		],
+	},
+
+	/** Cylindrical thermal store (Sunamp-style heat battery). */
+	tank: {
+		mdiFallback: 'mdi:propane-tank',
+		paths: [
+			{
+				fillRule: 'evenodd',
+				d:
+					// stem + dome + cylinder + base
+					'M11.25 1.2h1.5v1.7h-1.5z' +
+					'M8 5.1c0-1.6 1.8-2.9 4-2.9s4 1.3 4 2.9v12.6c0 1.75-1.8 3.15-4 3.15s-4-1.4-4-3.15V5.1z' +
+					// insulation bands (cut)
+					'M8.85 9.1h6.3v1.2H8.85zm0 3.4h6.3v1.2H8.85z' +
+					// dome highlight
+					'M9.5 4.85c0-.7 1.1-1.25 2.5-1.25s2.5.55 2.5 1.25c0 .18-.14.32-.32.32H9.82c-.18 0-.32-.14-.32-.32z',
+			},
+		],
+	},
+};
+
+/** Flat path map for simple single-path consumers (first path only). */
 export const loadSplitSvgPaths: Record<LoadSplitSvgKind, string> = {
-	car: MDI_CAR_SIDE,
-	house: MDI_HOME_OUTLINE,
-	heat_pump: MDI_HEAT_PUMP,
-	tank: MDI_PROPANE_TANK,
+	car: loadSplitIcons.car.paths[0].d,
+	tesla: loadSplitIcons.tesla.paths[0].d,
+	puma: loadSplitIcons.puma.paths[0].d,
+	house: loadSplitIcons.house.paths[0].d,
+	heat_pump: loadSplitIcons.heat_pump.paths[0].d,
+	tank: loadSplitIcons.tank.paths[0].d,
+};
+
+export const loadSplitMdiIcons: Record<LoadSplitSvgKind, string> = {
+	car: loadSplitIcons.car.mdiFallback,
+	tesla: loadSplitIcons.tesla.mdiFallback,
+	puma: loadSplitIcons.puma.mdiFallback,
+	house: loadSplitIcons.house.mdiFallback,
+	heat_pump: loadSplitIcons.heat_pump.mdiFallback,
+	tank: loadSplitIcons.tank.mdiFallback,
 };
 
 const ID_TO_KIND: Record<string, LoadSplitSvgKind> = {
 	house: 'house',
 	car: 'car',
 	cars: 'car',
-	tesla: 'car',
-	puma: 'car',
+	tesla: 'tesla',
+	puma: 'puma',
 	heat_pump: 'heat_pump',
 	heatpump: 'heat_pump',
 	sunamp: 'tank',
@@ -53,10 +177,7 @@ const ID_TO_KIND: Record<string, LoadSplitSvgKind> = {
 	tank: 'tank',
 };
 
-/**
- * Legacy / generic MDI keys → modern split kind.
- * Remaps EV-charger / snowflake / boiler stand-ins to the polished icons.
- */
+/** Legacy / generic MDI → custom kind (id still wins when present). */
 const MDI_TO_KIND: Record<string, LoadSplitSvgKind> = {
 	'mdi:car': 'car',
 	'mdi:car-side': 'car',
@@ -81,8 +202,8 @@ const MDI_TO_KIND: Record<string, LoadSplitSvgKind> = {
 };
 
 /**
- * Resolve modern split icon kind for a node.
- * Prefer node id; remap legacy MDI so old YAML still gets polished art.
+ * Resolve custom icon kind for a split node.
+ * Prefer node id (tesla/puma/heat_pump/sunamp); remap legacy MDI otherwise.
  */
 export function resolveLoadSplitSvgKind(
 	nodeId: string,
@@ -99,7 +220,6 @@ export function resolveLoadSplitSvgKind(
 	return null;
 }
 
-/** Resolve the modern mdi:* string for a split node (for docs / ha-icon fallback). */
 export function resolveModernSplitMdi(
 	nodeId: string,
 	icon?: string,
