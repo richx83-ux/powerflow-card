@@ -55,7 +55,10 @@ function wrapClickable(entity: string | undefined, content: unknown) {
 	return content;
 }
 
-/** Prefer built-in mockup SVG paths; fall back to ha-icon / image URL. */
+/**
+ * Prefer official MDI path glyphs for known split kinds (crisp at card size,
+ * independent of ha-icon). Fall back to image URL or ha-icon.
+ */
 function renderSplitIcon(
 	entity: string | undefined,
 	icon: string | undefined,
