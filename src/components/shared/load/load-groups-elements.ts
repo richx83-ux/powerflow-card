@@ -81,15 +81,28 @@ function renderSplitIcon(
 				viewBox="0 0 24 24"
 				overflow="visible"
 			>
-				${def.paths.map(
-					(p) => svg`
+				${def.paths.map((p) => {
+					const mode = p.mode || 'stroke';
+					if (mode === 'fill') {
+						return svg`
+							<path
+								fill="${colour}"
+								fill-rule="${p.fillRule || 'nonzero'}"
+								d="${p.d}"
+							/>
+						`;
+					}
+					return svg`
 						<path
-							fill="${colour}"
-							fill-rule="${p.fillRule || 'nonzero'}"
+							fill="none"
+							stroke="${colour}"
+							stroke-width="${p.strokeWidth ?? 1.15}"
+							stroke-linecap="round"
+							stroke-linejoin="round"
 							d="${p.d}"
 						/>
-					`,
-				)}
+					`;
+				})}
 			</svg>
 		`;
 		return wrapClickable(entity, body);

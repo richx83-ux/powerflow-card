@@ -221,16 +221,16 @@ Additive options that split the essential load sink into **House** and **Cars** 
 
 ### Custom split icons (by load id)
 
-When `load_groups.show_split` is on, these node **ids** render original vector silhouettes (no brand logos — vehicle *shape* only):
+When `load_groups.show_split` is on, these node **ids** render **thin stroke line-art** icons (mockup style: outline cars/house/appliances on dark dashboards — no brand logos):
 
 | Node id | Artwork | Suggested YAML |
 | --- | --- | --- |
-| `tesla` | Model Y–style fastback crossover silhouette | `id: tesla` (icon optional) |
-| `puma` | Compact crossover silhouette (Puma-like stance) | `id: puma` (icon optional) |
-| `heat_pump` / `heatpump` | Outdoor condenser with fan grille | `id: heat_pump` — **not** `mdi:snowflake` |
-| `sunamp` / `tank` / `water_heater` | Cylindrical thermal store | `id: sunamp` |
-| `car` / `cars` | Generic modern EV hatch (Cars hub) | omit or any remapped MDI |
-| `house` | Modern home (House hub) | omit or any remapped MDI |
+| `tesla` | Model Y–style fastback (doors, glass, wheels) | `id: tesla` (icon optional) |
+| `puma` | Upright compact crossover (arched rear) | `id: puma` (icon optional) |
+| `heat_pump` / `heatpump` | Outdoor unit (fan + louvers) + indoor unit | `id: heat_pump` — **not** `mdi:snowflake` |
+| `sunamp` / `tank` / `water_heater` | Banded cylindrical thermal store | `id: sunamp` |
+| `car` / `cars` | Outline EV hatch (Cars hub) | omit or any remapped MDI |
+| `house` | Outline home with windows/door/chimney | omit or any remapped MDI |
 
 Icons are chosen from **`id`**, so YAML does not need brand logo URLs. Legacy MDI keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, …) remap to the matching custom glyph. To force custom art, set an **image URL** on `icon:` or under `icons:`.
 

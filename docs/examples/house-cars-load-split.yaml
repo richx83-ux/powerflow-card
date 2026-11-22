@@ -2,9 +2,9 @@
 # Hierarchy: total load → Cars → (Tesla, Puma) and House → (Heat Pump, Sunamp).
 # Do NOT map these into load.additional_loads / essential_load1–4.
 #
-# Icons: wired by load id — original silhouettes for tesla (Model Y), puma,
-# heat_pump (outdoor unit), sunamp (cylindrical store). No brand logo URLs needed.
-# Legacy MDI keys remap automatically; only an image URL overrides.
+# Icons: wired by load id — thin stroke line-art (mockup style) for tesla
+# (Model Y), puma, heat_pump (outdoor+indoor), sunamp (banded tank).
+# No brand logo URLs needed. Legacy MDI remaps; image URL overrides.
 type: custom:detailed-power-flow-card
 cardstyle: compact
 wide: true

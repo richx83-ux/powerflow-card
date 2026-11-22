@@ -62,7 +62,7 @@ icons:
   car: mdi:car-side
 ```
 
-**Custom silhouettes (by id):** `tesla` → Model Y–style fastback; `puma` → upright compact crossover; `heat_pump` → outdoor condenser; `sunamp`/`tank` → cylindrical store; `car`/`house` hubs match the same filled style. Legacy MDI remaps; no brand logos.
+**Custom stroke line-art (by id):** `tesla` → Model Y fastback outline; `puma` → upright crossover outline; `heat_pump` → outdoor unit + indoor; `sunamp`/`tank` → banded cylinder; `car`/`house` hubs match the thin-stroke style. Legacy MDI remaps; no brand logos.
 
 Worked example: [`docs/examples/house-cars-load-split.yaml`](../examples/house-cars-load-split.yaml).
 
