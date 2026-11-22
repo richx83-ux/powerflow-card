@@ -6,7 +6,7 @@ import { Utils } from '../../../helpers/utils';
 import {
 	AutarkyType,
 	DataDto,
-	sunsynkPowerFlowCardConfig,
+	detailedPowerFlowCardConfig,
 } from '../../../types';
 import { icons } from '../../../helpers/icons';
 import {
@@ -18,7 +18,7 @@ import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 export const renderInverterElements = (
 	data: DataDto,
 	inverterImg: string,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const { inverterColour, enableAutarky, enableTimer, priorityLoad } = data;
 

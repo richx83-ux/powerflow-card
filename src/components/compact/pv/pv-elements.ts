@@ -2,7 +2,7 @@
 import { html, svg } from 'lit';
 import { localize } from '../../../localize/localize';
 import { Utils } from '../../../helpers/utils';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 import {
 	UnitOfElectricalCurrent,
 	UnitOfElectricPotential,
@@ -15,7 +15,7 @@ import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 
 export const renderSolarElements = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
 		solarColour,

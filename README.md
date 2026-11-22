@@ -9,7 +9,7 @@ An animated Home Assistant card for visualizing inverter power flow (solar, batt
 
 This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design, documentation, and releases; this fork is where Detailed Power Flow Card expansions will land.
 
-The Lovelace card type remains `custom:sunsynk-power-flow-card` (and the JS filename is unchanged) so existing dashboards and HACS installs keep working.
+Lovelace type: `custom:detailed-power-flow-card` (distinct from upstream `custom:sunsynk-power-flow-card`). UI name: **Detailed Power Flow Card**.
 
 ### Planned expansions
 
@@ -91,7 +91,8 @@ The card can be installed via HACS (recommended) or manually.
 ### Manual Installation
 
 1. Create a new directory under `www` and name it `detailed-power-flow-card` e.g `www/detailed-power-flow-card/`.
-2. Copy the `sunsynk-power-flow-card.js` into the directory (filename kept for compatibility with existing configs).
-3. Add the resource to your Dashboard. You can append the filename with a `?ver=x` and increment x each time you download a new version to force a reload and avoid using a cached version. It is also a good idea to clear your browser cache.
+2. Copy the `detailed-power-flow-card.js` into the directory.
+3. Add the resource to your Dashboard (e.g. `/local/detailed-power-flow-card/detailed-power-flow-card.js`). You can append the filename with a `?ver=x` and increment x each time you download a new version to force a reload and avoid using a cached version. It is also a good idea to clear your browser cache.
+4. Add a card with `type: custom:detailed-power-flow-card`.
 
 ![image](https://user-images.githubusercontent.com/7227275/235441241-93ab0c7d-341d-428f-8ca8-60ec932dde2d.png)

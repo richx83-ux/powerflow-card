@@ -3,7 +3,7 @@ import { CustomEntity } from './inverters/dto/custom-entity';
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'sunsynk-power-flow-card': LovelaceCard;
+		'detailed-power-flow-card': LovelaceCard;
 	}
 }
 
@@ -52,7 +52,7 @@ export enum AutarkyType {
 	No = 'no',
 }
 
-export interface sunsynkPowerFlowCardConfig extends LovelaceCardConfig {
+export interface detailedPowerFlowCardConfig extends LovelaceCardConfig {
 	type: string;
 	cardstyle: CardStyle;
 	wide?: boolean;
@@ -383,7 +383,7 @@ export interface InverterSettings {
 
 export interface DataDto {
 	timestamp_id: number;
-	config: sunsynkPowerFlowCardConfig;
+	config: detailedPowerFlowCardConfig;
 	compactMode;
 	viewBoxYLite;
 	viewBoxHeightLite;

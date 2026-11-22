@@ -6,7 +6,7 @@ import { Utils } from '../../../helpers/utils';
 import {
 	AutarkyType,
 	DataDto,
-	sunsynkPowerFlowCardConfig,
+	detailedPowerFlowCardConfig,
 } from '../../../types';
 import { icons } from '../../../helpers/icons';
 import { UnitOfElectricalCurrent, UnitOfPower } from '../../../const';
@@ -16,7 +16,7 @@ import { renderPath } from '../../../helpers/render-path';
 export const renderInverterElements = (
 	data: DataDto,
 	inverterImg: string,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
 		inverterColour,

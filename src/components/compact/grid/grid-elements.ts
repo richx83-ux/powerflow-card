@@ -2,7 +2,7 @@
 import { svg, html } from 'lit';
 import { localize } from '../../../localize/localize';
 import { Utils } from '../../../helpers/utils';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 import { icons } from '../../../helpers/icons';
 import {
 	UnitOfPower,
@@ -13,7 +13,7 @@ import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
 import { renderPath } from '../../../helpers/render-path';
 import { renderCircle } from '../../../helpers/render-circle';
 
-const renderGridIcons = (data: DataDto, config: sunsynkPowerFlowCardConfig) => {
+const renderGridIcons = (data: DataDto, config: detailedPowerFlowCardConfig) => {
 	const isGridConnected = validGridConnected.includes(
 		data.gridStatus.toLowerCase(),
 	);
@@ -47,7 +47,7 @@ const renderGridIcons = (data: DataDto, config: sunsynkPowerFlowCardConfig) => {
 
 const renderGridTotalPower = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const totalGridPower = data.totalGridPower;
 	const auto_scale = config.grid.auto_scale;
@@ -78,7 +78,7 @@ const renderGridTotalPower = (
 
 export const renderGridElements = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const { decimalPlaces, gridColour, totalGridPower } = data;
 

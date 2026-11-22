@@ -1,12 +1,12 @@
 import { svg } from 'lit';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 
 export function renderPV(
 	id: string,
 	x: string,
 	y: string,
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) {
 	// Only vary gradient id when efficiency > 0 and gradient is used.
 	// When efficiency is 0, we render a stable grey stroke without a gradient to avoid paint churn.

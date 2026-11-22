@@ -1,7 +1,7 @@
 # Detailed Power Flow Card — expansions config sketch
 
 Planned options for this fork. Types land in `src/types.ts` / `src/defaults.ts` under additive
-namespaces so existing `custom:sunsynk-power-flow-card` configs keep working.
+namespaces so existing Detailed Power Flow Card configs keep working.
 
 ## Goals
 
@@ -13,7 +13,7 @@ namespaces so existing `custom:sunsynk-power-flow-card` configs keep working.
 ## Proposed surface (YAML)
 
 ```yaml
-type: custom:sunsynk-power-flow-card # card type unchanged for HACS continuity
+type: custom:detailed-power-flow-card
 
 # Additive — omit to keep upstream behaviour
 flows:
@@ -55,7 +55,7 @@ icons:
 
 ## TypeScript landing spot
 
-Add optional fields on `sunsynkPowerFlowCardConfig` (do not require them):
+Add optional fields on `detailedPowerFlowCardConfig` (do not require them):
 
 ```ts
 flows?: {

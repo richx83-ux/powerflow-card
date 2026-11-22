@@ -4,7 +4,7 @@ import { guard } from 'lit/directives/guard.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { localize } from '../../../localize/localize';
 import { Utils } from '../../../helpers/utils';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 import { icons } from '../../../helpers/icons';
 import { UnitOfPower } from '../../../const';
 import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
@@ -16,7 +16,7 @@ import { renderCircle } from '../../../helpers/render-circle';
 
 export const renderAuxLoadElements = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
 		showAux,
