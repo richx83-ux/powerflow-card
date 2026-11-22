@@ -60,8 +60,9 @@ car_loads:
 # Merges with existing load1_icon … load6_icon and aux icons.
 icons:
   house: mdi:home
-  car: mdi:ev-station
-  # heat_pump / water_heater / tesla keys match large_loads[].id / car_loads[].id
+  car: mdi:car # car silhouette (not EV pump) for Cars hub + vehicles
+  # heat_pump → mdi:heat-pump; sunamp → mdi:propane-tank (tank)
+  # keys match large_loads[].id / car_loads[].id
 ```
 
 Worked example: [`docs/examples/house-cars-load-split.yaml`](../examples/house-cars-load-split.yaml).

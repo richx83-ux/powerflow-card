@@ -2,10 +2,26 @@ import { convertToCustomEntity } from '../inverters/dto/custom-entity';
 import type { CustomEntity } from '../inverters/dto/custom-entity';
 import type { NamedLoadItem, detailedPowerFlowCardConfig } from '../types';
 
+/** Mockup-style defaults: car silhouettes, house, outdoor heat pump, tank. */
 const DEFAULT_HOUSE_ICON = 'mdi:home';
-const DEFAULT_CAR_ICON = 'mdi:car-electric';
+const DEFAULT_CAR_ICON = 'mdi:car';
+const DEFAULT_HEAT_PUMP_ICON = 'mdi:heat-pump';
+const DEFAULT_TANK_ICON = 'mdi:propane-tank';
 const DEFAULT_LARGE_LOAD_ICON = 'mdi:lightning-bolt';
 const MAX_VISIBLE_LOADS = 4;
+
+/** Sensible icons for common large_loads / car_loads ids when icon omitted. */
+const ID_ICON_DEFAULTS: Record<string, string> = {
+	house: DEFAULT_HOUSE_ICON,
+	car: DEFAULT_CAR_ICON,
+	cars: DEFAULT_CAR_ICON,
+	heat_pump: DEFAULT_HEAT_PUMP_ICON,
+	heatpump: DEFAULT_HEAT_PUMP_ICON,
+	sunamp: DEFAULT_TANK_ICON,
+	water_heater: 'mdi:water-boiler',
+	tesla: DEFAULT_CAR_ICON,
+	puma: DEFAULT_CAR_ICON,
+};
 
 export type HassStates = Record<string, unknown>;
 
@@ -17,6 +33,10 @@ export function resolveNodeIcon(
 	const fromMap = config.icons?.[nodeId];
 	if (fromMap && fromMap !== 'default') {
 		return fromMap;
+	}
+	const fromId = ID_ICON_DEFAULTS[nodeId];
+	if (fromId) {
+		return fromId;
 	}
 	return fallback || DEFAULT_LARGE_LOAD_ICON;
 }
@@ -147,4 +167,10 @@ export function buildLoadGroupSnapshot(
 	};
 }
 
-export { MAX_VISIBLE_LOADS, DEFAULT_HOUSE_ICON, DEFAULT_CAR_ICON };
+export {
+	MAX_VISIBLE_LOADS,
+	DEFAULT_HOUSE_ICON,
+	DEFAULT_CAR_ICON,
+	DEFAULT_HEAT_PUMP_ICON,
+	DEFAULT_TANK_ICON,
+};

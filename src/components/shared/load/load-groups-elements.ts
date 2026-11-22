@@ -31,6 +31,15 @@ function formatPower(
 		: `${power || 0} ${UnitOfPower.WATT}`;
 }
 
+const HUB_BOX_W = 70;
+const HUB_ICON_SIZE = 28;
+
+/** Top-left X so a square icon FO is centred over a hub power box. */
+function hubIconX(boxX: number, iconSize: number = HUB_ICON_SIZE): number {
+	const foW = iconSize + 4;
+	return boxX + (HUB_BOX_W - foW) / 2;
+}
+
 function renderColouredIcon(
 	entity: string | undefined,
 	icon: string | undefined,
@@ -42,9 +51,10 @@ function renderColouredIcon(
 	if (!icon) {
 		return svg``;
 	}
+	const foW = size + 4;
 	const fo = svg`
-		<foreignObject x="${x}" y="${y}" width="${size + 4}" height="${size + 4}" display="inline">
-			<div xmlns="http://www.w3.org/1999/xhtml" style="width: ${size + 4}px; height: ${size + 4}px;">
+		<foreignObject x="${x}" y="${y}" width="${foW}" height="${foW}" display="inline">
+			<div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: center; justify-content: center; width: ${foW}px; height: ${foW}px;">
 				<ha-icon icon="${icon}" style="color: ${colour}; --mdc-icon-size: ${size}px;"></ha-icon>
 			</div>
 		</foreignObject>
@@ -222,10 +232,9 @@ export const renderLoadGroupElements = (
 					carsBoxY: 110,
 					houseBoxX: wide ? 430 : 410,
 					houseBoxY: 275,
-					carsIconX: wide ? 438 : 418,
-					carsIconY: 84,
-					houseIconX: wide ? 438 : 418,
-					houseIconY: 249,
+					// Icon Y sits just above the power box (centred in X via hubIconX).
+					carsIconY: 110 - HUB_ICON_SIZE - 2,
+					houseIconY: 275 - HUB_ICON_SIZE - 2,
 					// Daily sits under the House hub label, left of child column.
 					dailyX: wide ? 430 : 410,
 					dailyValueY: 331,
@@ -242,10 +251,8 @@ export const renderLoadGroupElements = (
 					carsBoxY: 33,
 					houseBoxX: wide ? 420 : 400,
 					houseBoxY: 163,
-					carsIconX: wide ? 428 : 408,
-					carsIconY: 7,
-					houseIconX: wide ? 428 : 408,
-					houseIconY: 137,
+					carsIconY: 33 - HUB_ICON_SIZE - 2,
+					houseIconY: 163 - HUB_ICON_SIZE - 2,
 					dailyX: wide ? 420 : 400,
 					dailyValueY: 215,
 					dailyLabelY: 228,
@@ -274,15 +281,15 @@ export const renderLoadGroupElements = (
 				config.load_groups?.car_entity,
 				carIcon,
 				carColour,
-				coords.carsIconX,
+				hubIconX(coords.carsBoxX),
 				coords.carsIconY,
-				28,
+				HUB_ICON_SIZE,
 			)}
 			<rect
 				id="lg-cars-box"
 				x="${coords.carsBoxX}"
 				y="${coords.carsBoxY}"
-				width="70"
+				width="${HUB_BOX_W}"
 				height="30"
 				rx="4.5"
 				ry="4.5"
@@ -353,15 +360,15 @@ export const renderLoadGroupElements = (
 				config.load_groups?.house_entity,
 				houseIcon,
 				houseColour,
-				coords.houseIconX,
+				hubIconX(coords.houseBoxX),
 				coords.houseIconY,
-				28,
+				HUB_ICON_SIZE,
 			)}
 			<rect
 				id="lg-house-box"
 				x="${coords.houseBoxX}"
 				y="${coords.houseBoxY}"
-				width="70"
+				width="${HUB_BOX_W}"
 				height="30"
 				rx="4.5"
 				ry="4.5"
