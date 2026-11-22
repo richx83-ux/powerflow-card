@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Карта Home Assistant для емуляції потоку енергії Sunsynk, що відображається на екрані інвертора",
+    "description": "Detailed Power Flow Card — карта Home Assistant для візуалізації потоку енергії інвертора",
     "version": "Версія",
     "runtime_to": "ЧАС ДО",
     "battery_floating": "ПІДТРИМУЮЧИЙ ЗАРЯД",

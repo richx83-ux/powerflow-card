@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { localize } from '../../../localize/localize';
 import { Utils } from '../../../helpers/utils';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 import {
 	UnitOfElectricalCurrent,
 	UnitOfElectricPotential,
@@ -15,7 +15,7 @@ import { renderCircle } from '../../../helpers/render-circle';
 
 export const renderBatteryElements = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
 		batteryCount,

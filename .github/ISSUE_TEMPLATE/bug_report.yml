@@ -8,7 +8,7 @@ body:
         **NOTE:** Before you start, the following should be completed.
 
         - Read the documentation to ensure the correct setup.
-        - Make sure no [similar issues(including closed ones)](https://github.com/slipx06/sunsynk-power-flow-card/issues?q=is%3Aissue+is%3Aopen+label%3Atype%2Fbug) exists.
+        - Make sure no [similar issues(including closed ones)](https://github.com/richx83-ux/powerflow-card/issues?q=is%3Aissue+is%3Aopen+label%3Atype%2Fbug) exists.
         - Make sure the request is based on the latest release.
 
         Thanks for taking the time to assist with improving this project!

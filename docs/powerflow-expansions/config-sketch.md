@@ -1,7 +1,7 @@
-# Powerflow expansions — config sketch
+# Detailed Power Flow Card — expansions config sketch
 
 Planned options for this fork. Types land in `src/types.ts` / `src/defaults.ts` under additive
-namespaces so existing sunsynk configs keep working.
+namespaces so existing Detailed Power Flow Card configs keep working.
 
 ## Goals
 
@@ -13,7 +13,7 @@ namespaces so existing sunsynk configs keep working.
 ## Proposed surface (YAML)
 
 ```yaml
-type: custom:sunsynk-power-flow-card  # card type unchanged for HACS continuity
+type: custom:detailed-power-flow-card
 
 # Additive — omit to keep upstream behaviour
 flows:
@@ -28,9 +28,9 @@ flows:
 load_groups:
   # Split essential load into house vs car when both entities are set.
   # If only one is set, that bucket uses existing essential_power behaviour.
-  house_entity: sensor.house_load_power   # optional
-  car_entity: sensor.ev_charger_power     # optional
-  show_split: true                        # when both present, draw two sinks
+  house_entity: sensor.house_load_power # optional
+  car_entity: sensor.ev_charger_power # optional
+  show_split: true # when both present, draw two sinks
 
 # Named large loads rendered as icon+power chips on the house side.
 # Prefer this list over inventing load7..loadN fields.
@@ -38,8 +38,8 @@ large_loads:
   - id: heat_pump
     name: Heat pump
     entity: sensor.heat_pump_power
-    icon: mdi:heat-pump                   # mdi:* or image URL
-    max_threshold: 5000                   # optional colour trip
+    icon: mdi:heat-pump # mdi:* or image URL
+    max_threshold: 5000 # optional colour trip
   - id: water_heater
     name: Water heater
     entity: sensor.water_heater_power
@@ -55,7 +55,7 @@ icons:
 
 ## TypeScript landing spot
 
-Add optional fields on `sunsynkPowerFlowCardConfig` (do not require them):
+Add optional fields on `detailedPowerFlowCardConfig` (do not require them):
 
 ```ts
 flows?: {

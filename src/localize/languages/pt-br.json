@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Um Card para o Home Assistant que ajuda a emular o fluxo de energia exibido na tela do inversor",
+    "description": "Detailed Power Flow Card — card do Home Assistant para visualização do fluxo de energia do inversor",
     "version": "Versão",
     "runtime_to": "TEMPO DE ATIVIDADE",
     "battery_floating": "FLUTUAÇÃO DA BATERIA",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Eine Home Assistant-Karte zur Emulation des Sunsynk-Stromflusses, der auf dem Inverter-Bildschirm angezeigt wird",
+    "description": "Detailed Power Flow Card — Home Assistant-Karte zur Visualisierung des Wechselrichter-Leistungsflusses",
     "version": "Version",
     "runtime_to": "LAUFZEIT BIS",
     "battery_floating": "BATTERIE haltend",

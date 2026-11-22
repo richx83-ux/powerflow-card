@@ -15,7 +15,7 @@ Minimal Configuration (Solar and Battery)
 .. code-block:: yaml
   :linenos:
 
-  type: custom:sunsynk-power-flow-card
+  type: custom:detailed-power-flow-card
   cardstyle: full
   show_solar: true
   wide: false

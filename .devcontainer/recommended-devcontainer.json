@@ -1,5 +1,5 @@
 {
-  "name": "sunsynk-power-flow-card",
+  "name": "detailed-power-flow-card",
   "dockerFile": "Dockerfile",
   "context": "..",
   "customizations": {

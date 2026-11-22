@@ -4,7 +4,7 @@ import { repeat } from 'lit/directives/repeat.js';
 import { guard } from 'lit/directives/guard.js';
 import { localize } from '../../../localize/localize';
 import { Utils } from '../../../helpers/utils';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../../../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../../../types';
 import { UnitOfPower } from '../../../const';
 import { getFullLayoutIconConfigs } from '../../shared/load/icon-configs';
 import { renderStaticLoadIcon } from '../../shared/load/render-static-load-icon';
@@ -15,7 +15,7 @@ import { renderCircle } from '../../../helpers/render-circle';
 
 export const renderLoadElements = (
 	data: DataDto,
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 ) => {
 	const {
 		showAux,

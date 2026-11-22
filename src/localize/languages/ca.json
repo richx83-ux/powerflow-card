@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Una tarjeta de Home Assistant per emular el flxue d'energoa Sunsynk que es mostra a la pantalla de l'inversor",
+    "description": "Detailed Power Flow Card — targeta de Home Assistant per visualitzar el flux d'energia de l'inversor",
     "version": "Versió",
     "runtime_to": "TEMPS FUNCIONAMENT FINS",
     "battery_floating": "BATERIA EN FLOTACIÓ",

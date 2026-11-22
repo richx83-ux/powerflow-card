@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { cache } from 'lit/directives/cache.js';
 import { keyed } from 'lit/directives/keyed.js';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../types';
 import { getDynamicStyles } from '../style';
 import { renderSolarElements } from '../components/full/pv/pv_elements';
 import { renderBatteryElements } from '../components/full/bat/bat-elements';
@@ -11,7 +11,7 @@ import { renderAuxLoadElements } from '../components/full/auxload/aux-elements';
 import { renderInverterElements } from '../components/full/inverter/inverter-elements';
 
 export const fullCard = (
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 	inverterImg: string,
 	data: DataDto,
 ) => {

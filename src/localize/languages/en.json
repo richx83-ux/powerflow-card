@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "A Home Assistant card to emulate the Sunsynk power flow that's shown on the Inverter screen",
+    "description": "Detailed Power Flow Card — Home Assistant Lovelace card for inverter power-flow visualization",
     "version": "Version",
     "runtime_to": "RUNTIME TO",
     "battery_floating": "BATTERY FLOATING",

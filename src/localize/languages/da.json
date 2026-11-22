@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Et Home Assistant-kort til at emulere Sunsynk-strømflowet, som vises på inverter-skærmen",
+    "description": "Detailed Power Flow Card — Home Assistant-kort til visualisering af inverter-strømflow",
     "version": "Version",
     "runtime_to": "Køretid til",
     "battery_floating": "BATTERI SVÆVER",

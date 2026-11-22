@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { cache } from 'lit/directives/cache.js';
 import { keyed } from 'lit/directives/keyed.js';
-import { DataDto, sunsynkPowerFlowCardConfig } from '../types';
+import { DataDto, detailedPowerFlowCardConfig } from '../types';
 import { renderSolarElements } from '../components/compact/pv/pv-elements';
 import { renderBatteryElements } from '../components/compact/bat/bat-elements';
 import { renderGridElements } from '../components/compact/grid/grid-elements';
@@ -10,7 +10,7 @@ import { renderInverterElements } from '../components/compact/inverter/inverter-
 import { getDynamicStyles } from '../style';
 
 export const compactCard = (
-	config: sunsynkPowerFlowCardConfig,
+	config: detailedPowerFlowCardConfig,
 	inverterImg: string,
 	data: DataDto,
 ) => {

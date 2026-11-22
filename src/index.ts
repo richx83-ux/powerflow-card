@@ -14,7 +14,7 @@ import {
 	DataDto,
 	InverterModel,
 	InverterSettings,
-	sunsynkPowerFlowCardConfig,
+	detailedPowerFlowCardConfig,
 } from './types';
 import defaultConfig from './defaults';
 import {
@@ -48,15 +48,16 @@ import {
 import { icons } from './helpers/icons';
 
 console.groupCollapsed(
-	`%c ⚡ SUNSYNK-POWER-FLOW-CARD %c ${localize('common.version')}: ${CARD_VERSION} `,
+	`%c ⚡ DETAILED-POWER-FLOW-CARD %c ${localize('common.version')}: ${CARD_VERSION} `,
 	'color: orange; font-weight: bold; background: black',
 	'color: white; font-weight: bold; background: dimgray',
 );
-console.log('Readme:', 'https://github.com/slipx06/sunsynk-power-flow-card');
+console.log('Readme:', 'https://github.com/richx83-ux/powerflow-card');
+console.log('Upstream:', 'https://github.com/slipx06/sunsynk-power-flow-card');
 console.groupEnd();
 
 @customElement(MAIN_NAME)
-export class SunsynkPowerFlowCard extends LitElement {
+export class DetailedPowerFlowCard extends LitElement {
 	// Coalesced Home Assistant state: throttle updates to once per animation frame
 	@property({ attribute: false })
 	public get hass(): HomeAssistant {
@@ -68,7 +69,7 @@ export class SunsynkPowerFlowCard extends LitElement {
 		// Schedule a single update in the next animation frame to coalesce bursts
 		this._scheduleUpdateFromHass(old);
 	}
-	@property() private _config!: sunsynkPowerFlowCardConfig;
+	@property() private _config!: detailedPowerFlowCardConfig;
 	@query('#grid-flow') gridFlow?: SVGSVGElement;
 	@query('#grid1-flow') grid1Flow?: SVGSVGElement;
 	@query('#solar-flow') solarFlow?: SVGSVGElement;
@@ -374,7 +375,7 @@ export class SunsynkPowerFlowCard extends LitElement {
 				pv2_voltage_111: 'sensor.sunsynk_pv2_voltage',
 				pv2_current_112: 'sensor.sunsynk_pv2_current',
 			},
-		} as unknown as sunsynkPowerFlowCardConfig;
+		} as unknown as detailedPowerFlowCardConfig;
 	}
 
 	render() {
@@ -2826,7 +2827,7 @@ export class SunsynkPowerFlowCard extends LitElement {
 	 * @param measurement used in toDisplay
 	 */
 	getEntity(
-		entity: keyof sunsynkPowerFlowCardConfig,
+		entity: keyof detailedPowerFlowCardConfig,
 		defaultValue: Partial<CustomEntity> | null = {
 			state: '0',
 			attributes: { unit_of_measurement: '' },
@@ -3120,7 +3121,7 @@ export class SunsynkPowerFlowCard extends LitElement {
 			}
 		}
 
-		const customConfig: sunsynkPowerFlowCardConfig = config;
+		const customConfig: detailedPowerFlowCardConfig = config;
 
 		this._config = merge({}, defaultConfig, customConfig);
 
@@ -3159,8 +3160,8 @@ export class SunsynkPowerFlowCard extends LitElement {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (window as any).customCards.push({
-	type: 'sunsynk-power-flow-card',
-	name: 'Sunsynk Power Flow Card',
+	type: 'detailed-power-flow-card',
+	name: 'Detailed Power Flow Card',
 	preview: true,
 	description: localize('common.description'),
 	configurable: true,

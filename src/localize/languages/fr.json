@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Une carte Home Assistant pour émuler les flux d'énergie affichés à l'écran des onduleurs Sunsynk ",
+    "description": "Detailed Power Flow Card — carte Home Assistant pour visualiser le flux d'énergie de l'onduleur",
     "version": "Version",
     "runtime_to": "DÉCHARGÉE À",
     "battery_floating": "BATTERIE FLOTTANTE",

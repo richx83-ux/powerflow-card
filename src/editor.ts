@@ -9,7 +9,7 @@ import {
 	AutarkyType,
 	CardStyle,
 	InverterModel,
-	sunsynkPowerFlowCardConfig,
+	detailedPowerFlowCardConfig,
 } from './types';
 import { customElement, property } from 'lit/decorators.js';
 import { localize } from './localize/localize';
@@ -24,11 +24,11 @@ export class SunSynkCardEditor
 	implements LovelaceCardEditor
 {
 	@property() public hass!: HomeAssistant;
-	private _config!: sunsynkPowerFlowCardConfig;
+	private _config!: detailedPowerFlowCardConfig;
 	@property() lovelace?: LovelaceConfig;
 
 	// Cache for performance
-	private _cachedSanitizedConfig?: sunsynkPowerFlowCardConfig;
+	private _cachedSanitizedConfig?: detailedPowerFlowCardConfig;
 	private _configVersion = 0;
 	private _lastCachedVersion = -1;
 
@@ -441,7 +441,7 @@ export class SunSynkCardEditor
 	}
 
 	// Return a sanitized config so ha-form color_rgb selectors receive proper [r,g,b] values
-	private _sanitizedConfig(): sunsynkPowerFlowCardConfig {
+	private _sanitizedConfig(): detailedPowerFlowCardConfig {
 		// Return cached version if config hasn't changed
 		if (
 			this._cachedSanitizedConfig &&
@@ -492,20 +492,20 @@ export class SunSynkCardEditor
 		]);
 
 		// Cache the result
-		this._cachedSanitizedConfig = copy as unknown as sunsynkPowerFlowCardConfig;
+		this._cachedSanitizedConfig = copy as unknown as detailedPowerFlowCardConfig;
 		this._lastCachedVersion = this._configVersion;
 
 		return this._cachedSanitizedConfig;
 	}
 
-	public setConfig(config: sunsynkPowerFlowCardConfig): void {
+	public setConfig(config: detailedPowerFlowCardConfig): void {
 		// Migrate any existing *_colour arrays/objects in incoming config to hex strings
 		const clone = JSON.parse(JSON.stringify(config)) as Record<string, unknown>;
 		this._normalizeColorsInObject(clone);
 		this._config = {
 			...defaults,
 			...this._config,
-			...(clone as unknown as sunsynkPowerFlowCardConfig),
+			...(clone as unknown as detailedPowerFlowCardConfig),
 		};
 		this._configVersion++;
 		this.requestUpdate();
@@ -1948,7 +1948,7 @@ export class SunSynkCardEditor
 
 	// (header removed)
 
-	private _emitConfig(config: sunsynkPowerFlowCardConfig): void {
+	private _emitConfig(config: detailedPowerFlowCardConfig): void {
 		this._config = config;
 		this._configVersion++;
 		// Clear cache when config changes
@@ -2053,6 +2053,6 @@ export class SunSynkCardEditor
 			}
 		}
 		// Update local config and emit cloned hex-normalized config; this keeps the form's RGB value intact
-		this._emitConfig(out as unknown as sunsynkPowerFlowCardConfig);
+		this._emitConfig(out as unknown as detailedPowerFlowCardConfig);
 	};
 }
