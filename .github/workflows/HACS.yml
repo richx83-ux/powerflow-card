@@ -13,3 +13,6 @@ jobs:
         uses: 'hacs/action@main'
         with:
           category: 'plugin'
+          # Repo topics are GitHub settings (not in-tree). Cursor token cannot set them;
+          # owner should add: home-assistant, hacs, lovelace, custom-card. Ignore until then.
+          ignore: topics

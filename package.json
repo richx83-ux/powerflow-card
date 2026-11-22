@@ -1,6 +1,6 @@
 {
   "name": "detailed-power-flow-card",
-  "version": "7.5.8",
+  "version": "7.5.9",
   "description": "A customizable Home Assistant card for detailed inverter power-flow visualization (fork of slipx06/sunsynk-power-flow-card).",
   "main": "sunsynk-power-flow-card.js",
   "prettier": {
