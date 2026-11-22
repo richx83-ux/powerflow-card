@@ -206,17 +206,17 @@ These attributes are only needed if `show_solar` is set to `true`.
 
 ### House / cars load split
 
-Additive options that split the essential load sink into **House** and **Cars** branches. Omit them to keep the classic single essential sink. Prefer `wide: true` so vehicle and large-load chips have room. Full worked example: [`docs/examples/house-cars-load-split.yaml`](examples/house-cars-load-split.yaml). Sketch: [`docs/powerflow-expansions/config-sketch.md`](powerflow-expansions/config-sketch.md).
+Additive options that split the essential load sink into **House** and **Cars** hierarchical branches. Omit them to keep the classic single essential sink. Prefer `cardstyle: compact` with `wide: true`. Children nest under their group (Cars → vehicles, House → large loads) — do **not** put these on `load.additional_loads` / `essential_load1–4`. Full example: [`docs/examples/house-cars-load-split.yaml`](examples/house-cars-load-split.yaml). Sketch: [`docs/powerflow-expansions/config-sketch.md`](powerflow-expansions/config-sketch.md).
 
 | Attribute / block   | Requirement | Default | Description |
 | ------------------- | ----------- | ------- | ----------- |
-| `load_groups.show_split` | Optional | `false` | When `true` **and** both `house_entity` and `car_entity` are set, draw House and Cars sinks from the total load node. Legacy `load.additional_loads` chips are hidden while the split is active. |
-| `load_groups.house_entity` | Optional | | Power sensor for the house branch. |
-| `load_groups.car_entity` | Optional | | Power sensor for the cars branch. |
-| `load_groups.house_name` | Optional | `House` | Label under the house sink. |
-| `load_groups.car_name` | Optional | `Cars` | Label under the cars sink. |
-| `large_loads` | Optional | `[]` | List of `{ id, name, entity, icon?, max_threshold? }` chips under House (max 4 shown). |
-| `car_loads` | Optional | `[]` | Same chip shape under Cars for individual vehicles (max 4 shown). |
+| `load_groups.show_split` | Optional | `false` | When `true` **and** both `house_entity` and `car_entity` are set, draw House and Cars hubs from the total load node. Legacy essential-load chips/icons are hidden while the split is active. |
+| `load_groups.house_entity` | Optional | | Power sensor for the house hub. |
+| `load_groups.car_entity` | Optional | | Power sensor for the cars hub. |
+| `load_groups.house_name` | Optional | `House` | Label under the house hub. |
+| `load_groups.car_name` | Optional | `Cars` | Label under the cars hub. |
+| `large_loads` | Optional | `[]` | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4). |
+| `car_loads` | Optional | `[]` | Nested chips under Cars only for individual vehicles (max 4). |
 | `icons` | Optional | `{}` | Map of node id → `mdi:*` (or image URL). Keys: `house`, `car`, and any `large_loads[].id` / `car_loads[].id`. |
 
 ### Grid

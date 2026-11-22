@@ -1,16 +1,14 @@
-# House vs cars load-flow split example for Detailed Power Flow Card
-# Prefer wide layout so vehicle / large-load chips sit beside the sinks.
+# House vs cars load-flow split — prefer compact + wide.
+# Hierarchy: total load → Cars → (Tesla, Puma) and House → (Heat Pump, Sunamp).
+# Do NOT map these into load.additional_loads / essential_load1–4.
 type: custom:detailed-power-flow-card
-cardstyle: full
+cardstyle: compact
 wide: true
 title: House & cars load split
 show_solar: true
 show_battery: true
 show_grid: true
 
-# Total load still comes from entities.essential_power (or calculated).
-# When load_groups.show_split is true and both house_entity + car_entity
-# are set, the essential sink splits into House and Cars branches.
 load_groups:
   show_split: true
   house_entity: sensor.house_load_power
@@ -18,7 +16,7 @@ load_groups:
   house_name: House
   car_name: Cars
 
-# Large loads under the House sink (heat pump, immersion, etc.)
+# Nested under the House hub only
 large_loads:
   - id: heat_pump
     name: Heat Pump
@@ -30,7 +28,7 @@ large_loads:
     entity: sensor.sunamp_power
     icon: mdi:water-boiler
 
-# Individual vehicles under the Cars sink
+# Nested under the Cars hub only
 car_loads:
   - id: tesla
     name: Tesla
@@ -41,7 +39,6 @@ car_loads:
     entity: sensor.ford_puma_charge_power
     icon: mdi:car
 
-# Optional icon overrides (keys match house / car / large_loads[].id / car_loads[].id)
 icons:
   house: mdi:home
   car: mdi:ev-station
@@ -55,7 +52,7 @@ load:
   dynamic_colour: true
   show_daily: true
   auto_scale: true
-  # Legacy additional_loads chips are hidden while the split is active.
+  # Keep at 0 — split owns this area; essential_load1–N are not used for cars/house.
   additional_loads: 0
   show_aux: false
 

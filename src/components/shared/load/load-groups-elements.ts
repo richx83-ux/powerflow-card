@@ -1,6 +1,5 @@
 import { html, svg } from 'lit';
 import { Utils } from '../../../helpers/utils';
-import { renderIcon } from '../../../helpers/render-icon';
 import { renderPath } from '../../../helpers/render-path';
 import { renderCircle } from '../../../helpers/render-circle';
 import { createTextWithPopup, renderText } from '../../../helpers/text-utils';
@@ -13,6 +12,14 @@ import type {
 } from '../../../types';
 
 type LayoutMode = 'full' | 'compact';
+
+/** Child chip geometry — icon above, power in rect, name below (no overlap). */
+const CHIP_W = 64;
+const CHIP_H = 22;
+/** Vertical pitch between stacked children. */
+const CHILD_PITCH = 68;
+/** Horizontal gap from parent hub left to child left (nest under / to the right). */
+const CHILD_INSET_X = 86;
 
 function formatPower(
 	power: number,
@@ -30,60 +37,51 @@ function renderColouredIcon(
 	colour: string,
 	x: number,
 	y: number,
+	size: number = 20,
 ) {
 	if (!icon) {
 		return svg``;
 	}
-	const body = svg`
-		<foreignObject x="${x}" y="${y}" width="30" height="30" display="inline">
-			<div xmlns="http://www.w3.org/1999/xhtml" style="position: fixed; width: 30px; height: 30px;">
-				<ha-icon icon="${icon}" style="color: ${colour}; --mdc-icon-size: 20px;"></ha-icon>
+	const fo = svg`
+		<foreignObject x="${x}" y="${y}" width="${size + 4}" height="${size + 4}" display="inline">
+			<div xmlns="http://www.w3.org/1999/xhtml" style="width: ${size + 4}px; height: ${size + 4}px;">
+				<ha-icon icon="${icon}" style="color: ${colour}; --mdc-icon-size: ${size}px;"></ha-icon>
 			</div>
 		</foreignObject>
 	`;
 	if (entity) {
 		return svg`
-			<a href="#" @click=${(e) => Utils.handlePopup(e, entity)}>
-				${body}
-			</a>
+			<a href="#" @click=${(e) => Utils.handlePopup(e, entity)}>${fo}</a>
 		`;
 	}
-	return body;
+	return fo;
 }
 
-function renderLoadChip(
+function renderChildChip(
 	item: NamedLoadItem,
 	x: number,
 	y: number,
 	autoScale: boolean,
 	decimalPlaces: number,
 ) {
+	const cx = x + CHIP_W / 2;
 	return svg`
-		<g id="named-load-${item.id}">
+		<g id="named-load-${item.id}" class="load-group-child">
+			${renderColouredIcon(item.entity, item.icon, item.colour, cx - 12, y - 22, 20)}
 			<rect
 				x="${x}"
 				y="${y}"
-				width="70"
-				height="22"
+				width="${CHIP_W}"
+				height="${CHIP_H}"
 				rx="4.5"
 				ry="4.5"
 				fill="none"
 				stroke="${item.colour}"
 				pointer-events="all"
 			/>
-			${renderColouredIcon(item.entity, item.icon, item.colour, x + 20, y - 28)}
-			${renderText(
-				`named-load-${item.id}-name`,
-				x + 35,
-				y + 32,
-				true,
-				'st3 st8',
-				item.colour,
-				item.name,
-			)}
 			${createTextWithPopup(
 				`named-load-${item.id}-power`,
-				x + 35,
+				cx,
 				y + 15,
 				item.state.isValid(),
 				'st3 st8',
@@ -91,33 +89,82 @@ function renderLoadChip(
 				item.state.toPowerString(autoScale, decimalPlaces),
 				(e) => Utils.handlePopup(e, item.entity),
 			)}
+			${renderText(
+				`named-load-${item.id}-name`,
+				cx,
+				y + CHIP_H + 11,
+				true,
+				'st3 st8',
+				item.colour,
+				item.name,
+			)}
 		</g>
 	`;
 }
 
-function renderLoadChips(
+function renderChildStem(
+	id: string,
+	parentRightX: number,
+	parentMidY: number,
+	childX: number,
+	childMidY: number,
+	colour: string,
+) {
+	const joinX = parentRightX + Math.max(10, (childX - parentRightX) / 2);
+	const d = `M ${parentRightX} ${parentMidY} L ${joinX} ${parentMidY} L ${joinX} ${childMidY} L ${childX} ${childMidY}`;
+	return renderPath(id, d, true, colour, 1);
+}
+
+/** First child Y so the stack is vertically centred on the parent hub. */
+function firstChildYForStack(parentMidY: number, count: number): number {
+	if (count <= 0) {
+		return parentMidY - CHIP_H / 2;
+	}
+	const stackSpan = (count - 1) * CHILD_PITCH;
+	return parentMidY - stackSpan / 2 - CHIP_H / 2;
+}
+
+function renderNestedChildren(
 	items: NamedLoadItem[],
-	startX: number,
-	startY: number,
-	horizontal: boolean,
-	gap: number,
+	parentBoxX: number,
+	parentBoxY: number,
+	parentBoxH: number,
+	colour: string,
 	autoScale: boolean,
 	decimalPlaces: number,
+	idPrefix: string,
 ) {
-	return items.map((item, index) =>
-		renderLoadChip(
-			item,
-			horizontal ? startX + index * gap : startX,
-			horizontal ? startY : startY + index * gap,
-			autoScale,
-			decimalPlaces,
-		),
-	);
+	if (!items.length) {
+		return [];
+	}
+	const parentRightX = parentBoxX + 70;
+	const parentMidY = parentBoxY + parentBoxH / 2;
+	const childX = parentBoxX + CHILD_INSET_X;
+	const firstY = firstChildYForStack(parentMidY, items.length);
+
+	return items.map((item, index) => {
+		const y = firstY + index * CHILD_PITCH;
+		const childMidY = y + CHIP_H / 2;
+		return svg`
+			${renderChildStem(
+				`${idPrefix}-stem-${item.id}`,
+				parentRightX,
+				parentMidY,
+				childX,
+				childMidY,
+				colour,
+			)}
+			${renderChildChip(item, childX, y, autoScale, decimalPlaces)}
+		`;
+	});
 }
 
 /**
- * House vs cars load split. Reuses essential-load visual language (rects, icons,
- * animated flow dots) and only renders when `data.showLoadSplit` is true.
+ * Hierarchical house vs cars load split.
+ *
+ * Total load → two group hubs only (Cars / House). Children nest under their
+ * parent via stems — never as siblings of the hubs in a flat grid.
+ * Prefer compact + wide.
  */
 export const renderLoadGroupElements = (
 	data: DataDto,
@@ -157,64 +204,63 @@ export const renderLoadGroupElements = (
 	const housePowerLabel = formatPower(housePower, auto_scale, decimalPlaces);
 	const carPowerLabel = formatPower(carPower, auto_scale, decimalPlaces);
 
-	// Full: branch from essential total-load box (~270,118) / path end ~371,118.
-	// Compact: branch from compact load box (~339,218).
+	/*
+	 * Compact (preferred with wide): tee off total-load box (~374,218.5).
+	 * Full: tee off essential path end (~371,118).
+	 * Hubs stack vertically; children nest to the RIGHT of each hub only.
+	 */
 	const coords =
-		mode === 'full'
+		mode === 'compact'
 			? {
-					carsBoxX: wide ? 420 : 390,
-					carsBoxY: 28,
-					houseBoxX: wide ? 420 : 390,
-					houseBoxY: 150,
 					carsPath: wide
-						? 'M 371 118 L 371 45 L 420 45'
-						: 'M 371 118 L 371 45 L 390 45',
+						? 'M 374 218.5 L 405 218.5 L 405 125 L 430 125'
+						: 'M 374 218.5 L 395 218.5 L 395 125 L 410 125',
 					housePath: wide
-						? 'M 371 118 L 371 165 L 420 165'
-						: 'M 371 118 L 371 165 L 390 165',
-					carChipX: wide ? 510 : 390,
-					carChipY: wide ? 8 : 72,
-					houseChipX: wide ? 510 : 390,
-					houseChipY: wide ? 200 : 214,
-					chipGap: wide ? 82 : 58,
-					chipHorizontal: wide,
-					dailyX: wide ? 455 : 425,
-					dailyLabelY: 198,
-					dailyValueY: 185,
-					carsIconX: wide ? 428 : 398,
-					carsIconY: 0,
-					houseIconX: wide ? 428 : 398,
-					houseIconY: 122,
+						? 'M 374 218.5 L 405 218.5 L 405 290 L 430 290'
+						: 'M 374 218.5 L 395 218.5 L 395 290 L 410 290',
+					carsBoxX: wide ? 430 : 410,
+					carsBoxY: 110,
+					houseBoxX: wide ? 430 : 410,
+					houseBoxY: 275,
+					carsIconX: wide ? 438 : 418,
+					carsIconY: 84,
+					houseIconX: wide ? 438 : 418,
+					houseIconY: 249,
+					// Daily sits under the House hub label, left of child column.
+					dailyX: wide ? 430 : 410,
+					dailyValueY: 331,
+					dailyLabelY: 344,
 				}
 			: {
-					carsBoxX: wide ? 420 : 406,
-					carsBoxY: 95,
-					houseBoxX: wide ? 420 : 406,
-					houseBoxY: 250,
 					carsPath: wide
-						? 'M 339 218 L 390 218 L 390 110 L 420 110'
-						: 'M 339 218 L 374 218 L 374 110 L 406 110',
+						? 'M 371 118 L 395 118 L 395 48 L 420 48'
+						: 'M 371 118 L 385 118 L 385 48 L 400 48',
 					housePath: wide
-						? 'M 339 218 L 390 218 L 390 265 L 420 265'
-						: 'M 339 218 L 374 218 L 374 265 L 406 265',
-					carChipX: wide ? 510 : 406,
-					carChipY: wide ? 55 : 145,
-					houseChipX: wide ? 510 : 406,
-					houseChipY: wide ? 300 : 300,
-					chipGap: wide ? 82 : 58,
-					chipHorizontal: wide,
-					dailyX: wide ? 455 : 441,
-					dailyLabelY: 298,
-					dailyValueY: 285,
-					carsIconX: wide ? 428 : 414,
-					carsIconY: 67,
-					houseIconX: wide ? 428 : 414,
-					houseIconY: 222,
+						? 'M 371 118 L 395 118 L 395 178 L 420 178'
+						: 'M 371 118 L 385 118 L 385 178 L 400 178',
+					carsBoxX: wide ? 420 : 400,
+					carsBoxY: 33,
+					houseBoxX: wide ? 420 : 400,
+					houseBoxY: 163,
+					carsIconX: wide ? 428 : 408,
+					carsIconY: 7,
+					houseIconX: wide ? 428 : 408,
+					houseIconY: 137,
+					dailyX: wide ? 420 : 400,
+					dailyValueY: 215,
+					dailyLabelY: 228,
 				};
 
 	return html`
 		<svg id="LoadGroups" style="overflow: visible;">
-			${renderPath('lg-cars-line', coords.carsPath, true, flowStroke, loadLineWidth)}
+			<!-- ===== Cars hub (upper branch) ===== -->
+			${renderPath(
+				'lg-cars-line',
+				coords.carsPath,
+				true,
+				flowStroke,
+				loadLineWidth,
+			)}
 			${renderCircle(
 				'lg-cars-dot',
 				dotRadius,
@@ -223,6 +269,14 @@ export const renderLoadGroupElements = (
 				'0;1',
 				'#lg-cars-line',
 				config.load.invert_flow === true,
+			)}
+			${renderColouredIcon(
+				config.load_groups?.car_entity,
+				carIcon,
+				carColour,
+				coords.carsIconX,
+				coords.carsIconY,
+				28,
 			)}
 			<rect
 				id="lg-cars-box"
@@ -236,24 +290,6 @@ export const renderLoadGroupElements = (
 				stroke="${carColour}"
 				pointer-events="all"
 			/>
-			${renderIcon(
-				config.load_groups?.car_entity,
-				carIcon,
-				'loadgroup-car-icon',
-				coords.carsIconX,
-				coords.carsIconY,
-				36,
-				36,
-			)}
-			${renderText(
-				'lg-cars-name',
-				coords.carsBoxX + 35,
-				coords.carsBoxY + 42,
-				true,
-				'st3 st8',
-				carColour,
-				carName,
-			)}
 			${
 				config.load_groups?.car_entity
 					? createTextWithPopup(
@@ -276,15 +312,27 @@ export const renderLoadGroupElements = (
 							carPowerLabel,
 						)
 			}
-			${renderLoadChips(
+			${renderText(
+				'lg-cars-name',
+				coords.carsBoxX + 35,
+				coords.carsBoxY + 44,
+				true,
+				'st3 st8',
+				carColour,
+				carName,
+			)}
+			${renderNestedChildren(
 				carLoads,
-				coords.carChipX,
-				coords.carChipY,
-				coords.chipHorizontal,
-				coords.chipGap,
+				coords.carsBoxX,
+				coords.carsBoxY,
+				30,
+				carColour,
 				auto_scale,
 				decimalPlaces,
+				'lg-cars',
 			)}
+
+			<!-- ===== House hub (lower branch) ===== -->
 			${renderPath(
 				'lg-house-line',
 				coords.housePath,
@@ -301,6 +349,14 @@ export const renderLoadGroupElements = (
 				'#lg-house-line',
 				config.load.invert_flow === true,
 			)}
+			${renderColouredIcon(
+				config.load_groups?.house_entity,
+				houseIcon,
+				houseColour,
+				coords.houseIconX,
+				coords.houseIconY,
+				28,
+			)}
 			<rect
 				id="lg-house-box"
 				x="${coords.houseBoxX}"
@@ -313,24 +369,6 @@ export const renderLoadGroupElements = (
 				stroke="${houseColour}"
 				pointer-events="all"
 			/>
-			${renderIcon(
-				config.load_groups?.house_entity,
-				houseIcon,
-				'loadgroup-house-icon',
-				coords.houseIconX,
-				coords.houseIconY,
-				36,
-				36,
-			)}
-			${renderText(
-				'lg-house-name',
-				coords.houseBoxX + 35,
-				coords.houseBoxY + 42,
-				true,
-				'st3 st8',
-				houseColour,
-				houseName,
-			)}
 			${
 				config.load_groups?.house_entity
 					? createTextWithPopup(
@@ -354,14 +392,13 @@ export const renderLoadGroupElements = (
 						)
 			}
 			${renderText(
-				'lg-house-daily-label',
-				coords.dailyX,
-				coords.dailyLabelY,
-				!loadShowDaily,
-				'st3 left-align',
-				houseColour,
-				config.load.label_daily_load || localize('common.daily_load'),
+				'lg-house-name',
+				coords.houseBoxX + 35,
+				coords.houseBoxY + 44,
 				true,
+				'st3 st8',
+				houseColour,
+				houseName,
 			)}
 			${createTextWithPopup(
 				'lg-house-daily-value',
@@ -374,14 +411,25 @@ export const renderLoadGroupElements = (
 				(e) => Utils.handlePopup(e, config.entities.day_load_energy_84),
 				true,
 			)}
-			${renderLoadChips(
+			${renderText(
+				'lg-house-daily-label',
+				coords.dailyX,
+				coords.dailyLabelY,
+				!loadShowDaily,
+				'st3 left-align',
+				houseColour,
+				config.load.label_daily_load || localize('common.daily_load'),
+				true,
+			)}
+			${renderNestedChildren(
 				largeLoads,
-				coords.houseChipX,
-				coords.houseChipY,
-				coords.chipHorizontal,
-				coords.chipGap,
+				coords.houseBoxX,
+				coords.houseBoxY,
+				30,
+				houseColour,
 				auto_scale,
 				decimalPlaces,
+				'lg-house',
 			)}
 		</svg>
 	`;

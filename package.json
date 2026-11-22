@@ -1,6 +1,6 @@
 {
   "name": "detailed-power-flow-card",
-  "version": "7.6.3",
+  "version": "7.6.4",
   "description": "Detailed Power Flow Card \u2014 Home Assistant Lovelace card for inverter power-flow visualization.",
   "main": "detailed-power-flow-card.js",
   "prettier": {

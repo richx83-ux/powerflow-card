@@ -56,9 +56,13 @@ export const renderLoadElements = (
 		dynamic_colour,
 	} = config.load;
 
+	// When the house/cars split is active, keep the Load group further left so
+	// nested child chips fit inside the wide viewBox (720) instead of clipping.
+	const loadGroupX = config.wide ? (showLoadSplit ? '8%' : '30%') : '0%';
+
 	return html`
 		<!-- Load Elements -->
-		<svg id="Load" style="overflow: visible" x="${config.wide ? '30%' : '0%'}">
+		<svg id="Load" style="overflow: visible" x="${loadGroupX}">
 			<rect
 				x="304"
 				y="203.5"
@@ -671,7 +675,7 @@ export const renderLoadElements = (
 				'daily_load',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '365' : '412',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '189' : '282.1',
-				!data.loadShowDaily,
+				showLoadSplit || !data.loadShowDaily,
 				'st3 left-align',
 				loadColour,
 				config.load.label_daily_load || localize('common.daily_load'),
@@ -784,11 +788,14 @@ export const renderLoadElements = (
 					config.load.invert_flow,
 				)}
 			</svg>
-			<svg id="load-flow1">
+			<svg
+				id="load-flow1"
+				style="display: ${showLoadSplit ? 'none' : 'inline'};"
+			>
 				${renderPath(
 					'es-line1',
 					'M 374 218.5 L 402.38 218.5',
-					true,
+					!showLoadSplit,
 					dynamic_colour ? flowColour : loadColour,
 					data.loadLineWidth,
 				)}
@@ -798,7 +805,7 @@ export const renderLoadElements = (
 						2 + data.loadLineWidth + Math.max(data.minLineWidth - 2, 0),
 						8,
 					),
-					essentialPower === 0 || essentialPower < 0
+					showLoadSplit || essentialPower === 0 || essentialPower < 0
 						? 'transparent'
 						: `${dynamic_colour ? flowColour : loadColour}`,
 					data.durationCur['load'],
@@ -812,7 +819,7 @@ export const renderLoadElements = (
 						2 + data.loadLineWidth + Math.max(data.minLineWidth - 2, 0),
 						8,
 					),
-					essentialPower === 0 || essentialPower > 0
+					showLoadSplit || essentialPower === 0 || essentialPower > 0
 						? 'transparent'
 						: `${dynamic_colour ? flowColour : loadColour}`,
 					data.durationCur['load'],
@@ -918,7 +925,9 @@ export const renderLoadElements = (
 				'daily_load_value',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '365' : '412',
 				[2, 3, 4, 5, 6].includes(additionalLoad) ? '175' : '267.9',
-				!data.loadShowDaily || !data.stateDayLoadEnergy.isValid(),
+				showLoadSplit ||
+					!data.loadShowDaily ||
+					!data.stateDayLoadEnergy.isValid(),
 				'st10 left-align',
 				loadColour,
 				data.stateDayLoadEnergy?.toPowerString(true, data.decimalPlacesEnergy),
@@ -955,23 +964,26 @@ export const renderLoadElements = (
 												: `${essentialPower || 0} ${UnitOfPower.WATT}`,
 										)}`
 			}
-			${guard(
-				[
-					data.additionalLoad,
-					data.showAux,
-					data.iconEssentialLoad1,
-					data.iconEssentialLoad2,
-					// Include dynamic colours so icon fill updates when they change
-					data.dynamicColourEssentialLoad1,
-					data.dynamicColourEssentialLoad2,
-				],
-				() =>
-					repeat(
-						getCompactLayoutIconConfigs(data),
-						(iconConfig) => iconConfig.id,
-						(iconConfig) => renderStaticLoadIcon(data, iconConfig),
-					),
-			)}
+			${
+				showLoadSplit
+					? ''
+					: guard(
+							[
+								data.additionalLoad,
+								data.showAux,
+								data.iconEssentialLoad1,
+								data.iconEssentialLoad2,
+								data.dynamicColourEssentialLoad1,
+								data.dynamicColourEssentialLoad2,
+							],
+							() =>
+								repeat(
+									getCompactLayoutIconConfigs(data),
+									(iconConfig) => iconConfig.id,
+									(iconConfig) => renderStaticLoadIcon(data, iconConfig),
+								),
+						)
+			}
 		</svg>
 	`;
 };
