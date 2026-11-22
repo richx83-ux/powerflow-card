@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Een Home Assistant-kaart voor gedetailleerde visualisatie van de omvormer-energiestroom",
+    "description": "Detailed Power Flow Card — Home Assistant-kaart voor visualisatie van omvormer-energiestroom",
     "version": "Versie",
     "runtime_to": "WERKTIJD TOT",
     "battery_floating": "DRIJVENDE BATTERIJ",

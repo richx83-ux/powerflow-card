@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Karta Home Assistant do szczegółowej wizualizacji przepływu energii falownika",
+    "description": "Detailed Power Flow Card — karta Home Assistant do wizualizacji przepływu energii falownika",
     "version": "Wersja",
     "runtime_to": "DO ROZŁADOWYWANIA DO",
     "battery_floating": "PODTRZYMANIE BATERII",

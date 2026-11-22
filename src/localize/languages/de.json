@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Eine Home Assistant-Karte zur detaillierten Visualisierung des Wechselrichter-Leistungsflusses",
+    "description": "Detailed Power Flow Card — Home Assistant-Karte zur Visualisierung des Wechselrichter-Leistungsflusses",
     "version": "Version",
     "runtime_to": "LAUFZEIT BIS",
     "battery_floating": "BATTERIE haltend",

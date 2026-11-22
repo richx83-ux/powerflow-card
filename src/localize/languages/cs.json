@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Karta Home Assistant pro podrobnou vizualizaci toku energie střídače",
+    "description": "Detailed Power Flow Card — karta Home Assistant pro vizualizaci toku energie střídače",
     "version": "Verze",
     "runtime_to": "ČAS DO",
     "battery_floating": "BATERIE JE NABITÁ",

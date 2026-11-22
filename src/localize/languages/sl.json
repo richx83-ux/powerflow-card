@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Kartica Home Assistant za podrobno vizualizacijo pretoka energije pretvornika",
+    "description": "Detailed Power Flow Card — kartica Home Assistant za vizualizacijo pretoka energije pretvornika",
     "version": "različica",
     "runtime_to": "spraznitev do",
     "battery_floating": "vzdrževanje polnosti",

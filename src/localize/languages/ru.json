@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Карта Home Assistant для детальной визуализации потока энергии инвертора",
+    "description": "Detailed Power Flow Card — карта Home Assistant для визуализации потока энергии инвертора",
     "version": "Версия",
     "runtime_to": "ВРЕМЯ ДО",
     "battery_floating": "ПЛАВАЮЩАЯ БАТАРЕЯ",

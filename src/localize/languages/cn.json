@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "用于详细可视化逆变器功率流的 Home Assistant 卡片",
+    "description": "Detailed Power Flow Card — 用于可视化逆变器功率流的 Home Assistant Lovelace 卡片",
     "version": "版本",
     "runtime_to": "运行时间至",
     "battery_floating": "电池浮充",

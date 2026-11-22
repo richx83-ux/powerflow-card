@@ -1,6 +1,6 @@
 {
   "common": {
-    "description": "Una scheda Home Assistant per la visualizzazione dettagliata del flusso di potenza dell'inverter",
+    "description": "Detailed Power Flow Card — scheda Home Assistant per visualizzare il flusso di potenza dell'inverter",
     "version": "Versione",
     "runtime_to": "DURATA AL",
     "battery_floating": "BATTERY CARICA",
