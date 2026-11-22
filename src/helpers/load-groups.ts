@@ -6,9 +6,9 @@ import {
 	resolveLoadSplitSvgKind,
 } from './load-split-icons';
 
-/** Mockup-style defaults: car silhouettes, house, outdoor heat pump, tank. */
-const DEFAULT_HOUSE_ICON = 'mdi:home';
-const DEFAULT_CAR_ICON = 'mdi:car';
+/** Modern MDI defaults (same glyphs as built-in split SVG paths). */
+const DEFAULT_HOUSE_ICON = 'mdi:home-outline';
+const DEFAULT_CAR_ICON = 'mdi:car-side';
 const DEFAULT_HEAT_PUMP_ICON = 'mdi:heat-pump';
 const DEFAULT_TANK_ICON = 'mdi:propane-tank';
 const DEFAULT_LARGE_LOAD_ICON = 'mdi:lightning-bolt';
@@ -22,7 +22,7 @@ const ID_ICON_DEFAULTS: Record<string, string> = {
 	heat_pump: DEFAULT_HEAT_PUMP_ICON,
 	heatpump: DEFAULT_HEAT_PUMP_ICON,
 	sunamp: DEFAULT_TANK_ICON,
-	water_heater: 'mdi:water-boiler',
+	water_heater: DEFAULT_TANK_ICON,
 	tesla: DEFAULT_CAR_ICON,
 	puma: DEFAULT_CAR_ICON,
 };

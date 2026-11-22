@@ -1,42 +1,46 @@
 /**
- * Built-in mockup SVG paths (viewBox 0 0 24 24) for house/cars load split.
- * Prefer these over ha-icon/MDI so HA matches the mockup even when YAML
- * still has old keys like mdi:ev-station / mdi:snowflake / mdi:water-boiler.
+ * Modern Material Design Icons for house/cars load split.
+ *
+ * Uses official @mdi/svg path data (not hand-drawn shapes) so icons match
+ * Home Assistant density. Known node ids and legacy bad YAML keys
+ * (mdi:ev-station, mdi:snowflake, mdi:water-boiler as heat-pump stand-in, etc.)
+ * remap to these modern icons. Image URLs still override.
  */
 
 export type LoadSplitSvgKind = 'car' | 'house' | 'heat_pump' | 'tank';
 
-/** Side-view car silhouette (mockup style). */
-const CAR_PATH =
-	'M5 11h14l-1.2-3.5c-.3-.9-1.1-1.5-2-1.5H8.2c-.9 0-1.7.6-2 1.5L5 11zm-.5 1.5' +
-	'c-.8 0-1.5.7-1.5 1.5v1c0 .3.2.5.5.5h1.1c.3 1.2 1.4 2 2.7 2s2.4-.8 2.7-2h5c.3 1.2' +
-	' 1.4 2 2.7 2s2.4-.8 2.7-2H21c.3 0 .5-.2.5-.5v-1c0-.8-.7-1.5-1.5-1.5H4.5zM8.5 16.5' +
-	'a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm9 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM8.5 7.5h7l.8 2.5H7.7l.8-2.5z';
-
-/** Simple home silhouette. */
-const HOUSE_PATH =
-	'M12 3L3 10.5V21h6v-6h6v6h6V10.5L12 3zm0 2.4l6 4.7V19h-2v-6H8v6H6v-7.9l6-4.7z';
-
-/** Outdoor heat-pump / condenser unit with fan grille. */
-const HEAT_PUMP_PATH =
-	'M3 5h18a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v9h16V7H4z' +
-	'm8 1.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zm0 1.5a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6z' +
-	'M2 19h20v1.5H2V19z';
-
-/** Cylindrical tank (Sunamp-style heat battery). */
-const TANK_PATH =
-	'M9 2h6c.6 0 1 .4 1 1v1h.5c1.9 0 3.5 1.6 3.5 3.5V19c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3' +
-	'V7.5C4 5.6 5.6 4 7.5 4H8V3c0-.6.4-1 1-1zm1 2v1h4V4h-4zM7.5 6C6.7 6 6 6.7 6 7.5V19c0' +
-	' .6.4 1 1 1h10c.6 0 1-.4 1-1V7.5c0-.8-.7-1.5-1.5-1.5h-9zM8 9h8v1.5H8V9zm0 3.5h8V14H8v-1.5z';
-
-export const loadSplitSvgPaths: Record<LoadSplitSvgKind, string> = {
-	car: CAR_PATH,
-	house: HOUSE_PATH,
-	heat_pump: HEAT_PUMP_PATH,
-	tank: TANK_PATH,
+/** Canonical modern MDI keys for split nodes. */
+export const loadSplitMdiIcons: Record<LoadSplitSvgKind, string> = {
+	car: 'mdi:car-side',
+	house: 'mdi:home-outline',
+	heat_pump: 'mdi:heat-pump',
+	tank: 'mdi:propane-tank',
 };
 
-const ID_TO_SVG: Record<string, LoadSplitSvgKind> = {
+/**
+ * Official Material Design Icons path data (viewBox 0 0 24 24).
+ * Source: @mdi/svg 7.4.47 — same glyphs HA ships via mdi:*.
+ */
+const MDI_CAR_SIDE =
+	'M16,6L19,10H21C22.11,10 23,10.89 23,12V15H21A3,3 0 0,1 18,18A3,3 0 0,1 15,15H9A3,3 0 0,1 6,18A3,3 0 0,1 3,15H1V12C1,10.89 1.89,10 3,10L6,6H16M10.5,7.5H6.75L4.86,10H10.5V7.5M12,7.5V10H17.14L15.25,7.5H12M6,13.5A1.5,1.5 0 0,0 4.5,15A1.5,1.5 0 0,0 6,16.5A1.5,1.5 0 0,0 7.5,15A1.5,1.5 0 0,0 6,13.5M18,13.5A1.5,1.5 0 0,0 16.5,15A1.5,1.5 0 0,0 18,16.5A1.5,1.5 0 0,0 19.5,15A1.5,1.5 0 0,0 18,13.5Z';
+
+const MDI_HOME_OUTLINE =
+	'M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22';
+
+const MDI_HEAT_PUMP =
+	'M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M12.75 7.08C13.57 7.2 14.32 7.5 14.95 8L12.75 10.19V7.08M11.25 7.08V10.19L9.05 8C9.68 7.5 10.43 7.2 11.25 7.08M8 9.05L10.19 11.25H7.08C7.2 10.43 7.5 9.68 8 9.05M7.08 12.75H10.19L8 14.95C7.5 14.32 7.2 13.57 7.08 12.75M11.25 16.92C10.43 16.8 9.68 16.5 9.05 16L11.25 13.81V16.92M12 13C11.45 13 11 12.55 11 12S11.45 11 12 11 13 11.45 13 12 12.55 13 12 13M12.75 16.92V13.81L14.95 16C14.32 16.5 13.57 16.8 12.75 16.92M16 14.95L13.81 12.75H16.92C16.8 13.57 16.5 14.32 16 14.95M13.81 11.25L16 9.05C16.5 9.69 16.8 10.44 16.92 11.25H13.81Z';
+
+const MDI_PROPANE_TANK =
+	'M4 15V18C4 20.21 5.79 22 8 22H16C18.21 22 20 20.21 20 18V15H4M20 13V10C20 8.14 18.72 6.59 17 6.14V4C17 2.9 16.1 2 15 2H9C7.9 2 7 2.9 7 4V6.14C5.28 6.59 4 8.14 4 10V13H20M9 4H15V6H13C13 5.45 12.55 5 12 5S11 5.45 11 6H9V4Z';
+
+export const loadSplitSvgPaths: Record<LoadSplitSvgKind, string> = {
+	car: MDI_CAR_SIDE,
+	house: MDI_HOME_OUTLINE,
+	heat_pump: MDI_HEAT_PUMP,
+	tank: MDI_PROPANE_TANK,
+};
+
+const ID_TO_KIND: Record<string, LoadSplitSvgKind> = {
 	house: 'house',
 	car: 'car',
 	cars: 'car',
@@ -49,8 +53,11 @@ const ID_TO_SVG: Record<string, LoadSplitSvgKind> = {
 	tank: 'tank',
 };
 
-/** Old / generic MDI keys → built-in mockup SVGs. */
-const MDI_TO_SVG: Record<string, LoadSplitSvgKind> = {
+/**
+ * Legacy / generic MDI keys → modern split kind.
+ * Remaps EV-charger / snowflake / boiler stand-ins to the polished icons.
+ */
+const MDI_TO_KIND: Record<string, LoadSplitSvgKind> = {
 	'mdi:car': 'car',
 	'mdi:car-side': 'car',
 	'mdi:car-electric': 'car',
@@ -74,23 +81,31 @@ const MDI_TO_SVG: Record<string, LoadSplitSvgKind> = {
 };
 
 /**
- * Resolve built-in mockup SVG for a split node.
- * Prefer node id; remap legacy MDI strings so old YAML still gets mockup art.
- * Returns null only for unknown custom icons (e.g. image URL or novel mdi:).
+ * Resolve modern split icon kind for a node.
+ * Prefer node id; remap legacy MDI so old YAML still gets polished art.
  */
 export function resolveLoadSplitSvgKind(
 	nodeId: string,
 	icon?: string,
 ): LoadSplitSvgKind | null {
 	const idKey = nodeId?.toLowerCase?.() || '';
-	if (ID_TO_SVG[idKey]) {
-		return ID_TO_SVG[idKey];
+	if (ID_TO_KIND[idKey]) {
+		return ID_TO_KIND[idKey];
 	}
 	const iconKey = (icon || '').trim().toLowerCase();
-	if (iconKey && MDI_TO_SVG[iconKey]) {
-		return MDI_TO_SVG[iconKey];
+	if (iconKey && MDI_TO_KIND[iconKey]) {
+		return MDI_TO_KIND[iconKey];
 	}
 	return null;
+}
+
+/** Resolve the modern mdi:* string for a split node (for docs / ha-icon fallback). */
+export function resolveModernSplitMdi(
+	nodeId: string,
+	icon?: string,
+): string | null {
+	const kind = resolveLoadSplitSvgKind(nodeId, icon);
+	return kind ? loadSplitMdiIcons[kind] : null;
 }
 
 export function isImageIcon(icon?: string): boolean {

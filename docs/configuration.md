@@ -217,21 +217,21 @@ Additive options that split the essential load sink into **House** and **Cars** 
 | `load_groups.car_name` | Optional | `Cars` | Label under the cars hub. |
 | `large_loads` | Optional | `[]` | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4). |
 | `car_loads` | Optional | `[]` | Nested chips under Cars only for individual vehicles (max 4). |
-| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids always prefer built-in mockup SVG artwork** (see below); image URLs still override. |
+| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids use official Material Design Icons** (see below); image URLs still override. |
 
-### Built-in mockup split icons
+### Modern split icons (official MDI)
 
-When `load_groups.show_split` is on, these node **ids** draw card-shipped SVG paths (mockup look) instead of generic MDI:
+When `load_groups.show_split` is on, these node **ids** render official `@mdi/svg` glyphs (same art as HA’s `mdi:*` set):
 
-| Node id | Artwork | Suggested YAML (optional — remapped if omitted/old) |
+| Node id | Official MDI glyph | Suggested YAML |
 | --- | --- | --- |
-| `house` | House silhouette | `icons.house: mdi:home` or omit |
-| `car` / `cars` | Side-view car | `icons.car: mdi:car` or omit |
-| `tesla` / `puma` (any vehicle id mapped as car) | Side-view car | `icon: mdi:car` — **not** `mdi:ev-station` |
-| `heat_pump` / `heatpump` | Outdoor condenser unit | `icon: mdi:heat-pump` — **not** `mdi:snowflake` |
-| `sunamp` / `tank` / `water_heater` | Cylindrical tank | `icon: mdi:propane-tank` — **not** `mdi:water-boiler` |
+| `house` | `mdi:home-outline` | `icons.house: mdi:home-outline` or omit |
+| `car` / `cars` | `mdi:car-side` | `icons.car: mdi:car-side` or omit |
+| `tesla` / `puma` | `mdi:car-side` | `icon: mdi:car-side` — **not** `mdi:ev-station` |
+| `heat_pump` / `heatpump` | `mdi:heat-pump` | `icon: mdi:heat-pump` — **not** `mdi:snowflake` |
+| `sunamp` / `tank` / `water_heater` | `mdi:propane-tank` | `icon: mdi:propane-tank` (cylindrical tank; remaps from `mdi:water-boiler`) |
 
-Legacy MDI keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, etc.) are remapped to the matching mockup SVG automatically. To force custom art, set an **image URL** (`https://…`, `/local/…`, or `data:…`) on `icon:` or under `icons:`.
+Legacy keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, `mdi:car`, `mdi:home`, …) remap to the matching modern glyph automatically. To force custom art, set an **image URL** (`https://…`, `/local/…`, or `data:…`) on `icon:` or under `icons:`.
 
 ### Grid
 
