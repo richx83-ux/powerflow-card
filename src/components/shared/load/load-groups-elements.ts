@@ -7,7 +7,7 @@ import { localize } from '../../../localize/localize';
 import { UnitOfPower } from '../../../const';
 import {
 	isImageIcon,
-	loadSplitSvgPaths,
+	loadSplitIcons,
 	resolveLoadSplitSvgKind,
 	type LoadSplitSvgKind,
 } from '../../../helpers/load-split-icons';
@@ -56,8 +56,8 @@ function wrapClickable(entity: string | undefined, content: unknown) {
 }
 
 /**
- * Prefer official MDI path glyphs for known split kinds (crisp at card size,
- * independent of ha-icon). Fall back to image URL or ha-icon.
+ * Prefer original vector glyphs for known split kinds (wired by load id).
+ * Fall back to image URL or ha-icon.
  */
 function renderSplitIcon(
 	entity: string | undefined,
@@ -69,7 +69,8 @@ function renderSplitIcon(
 	size: number,
 ) {
 	const kind = svgKind || null;
-	if (kind && loadSplitSvgPaths[kind]) {
+	const def = kind ? loadSplitIcons[kind] : undefined;
+	if (def?.paths?.length) {
 		const body = svg`
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +81,28 @@ function renderSplitIcon(
 				viewBox="0 0 24 24"
 				overflow="visible"
 			>
-				<path fill="${colour}" d="${loadSplitSvgPaths[kind]}" />
+				${def.paths.map((p) => {
+					const mode = p.mode || 'stroke';
+					if (mode === 'fill') {
+						return svg`
+							<path
+								fill="${colour}"
+								fill-rule="${p.fillRule || 'nonzero'}"
+								d="${p.d}"
+							/>
+						`;
+					}
+					return svg`
+						<path
+							fill="none"
+							stroke="${colour}"
+							stroke-width="${p.strokeWidth ?? 1.15}"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="${p.d}"
+						/>
+					`;
+				})}
 			</svg>
 		`;
 		return wrapClickable(entity, body);

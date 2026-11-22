@@ -2,10 +2,9 @@
 # Hierarchy: total load → Cars → (Tesla, Puma) and House → (Heat Pump, Sunamp).
 # Do NOT map these into load.additional_loads / essential_load1–4.
 #
-# Icons: known ids use official Material Design Icons
-# (mdi:car-side, mdi:home-outline, mdi:heat-pump, mdi:propane-tank).
-# Legacy keys (mdi:ev-station, mdi:snowflake, mdi:water-boiler) remap automatically.
-# Only an image URL overrides.
+# Icons: wired by load id — thin stroke line-art (mockup style) for tesla
+# (Model Y), puma, heat_pump (outdoor+indoor), sunamp (banded tank).
+# No brand logo URLs needed. Legacy MDI remaps; image URL overrides.
 type: custom:detailed-power-flow-card
 cardstyle: compact
 wide: true
@@ -26,27 +25,23 @@ large_loads:
   - id: heat_pump
     name: Heat Pump
     entity: sensor.heat_pump_power
-    icon: mdi:heat-pump
     max_threshold: 5000
   - id: sunamp
     name: Sunamp
     entity: sensor.sunamp_power
-    icon: mdi:propane-tank
 
 # Nested under the Cars hub only
 car_loads:
   - id: tesla
     name: Tesla
     entity: sensor.tesla_charge_power
-    icon: mdi:car-side
   - id: puma
     name: Puma
     entity: sensor.ford_puma_charge_power
-    icon: mdi:car-side
 
-# Optional — may omit; id-based modern MDI still applies.
+# Optional — ids alone select custom artwork; these MDI lines are remapped if present.
 icons:
-  house: mdi:home-outline
+  house: mdi:home
   car: mdi:car-side
   heat_pump: mdi:heat-pump
   sunamp: mdi:propane-tank
