@@ -1,15 +1,21 @@
 # Detailed Power Flow Card
 
-An animated Home Assistant card for visualizing inverter power flow (solar, battery, grid, and loads). You can use this to display data from many inverters — e.g. Sunsynk, Deye, Solis, Lux, FoxESS, Goodwe, Huawei — as long as you have the required sensor data. See the [upstream wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki) for integration methods and examples.
+A Home Assistant Lovelace card for detailed inverter power-flow visualization (solar, battery, grid, and loads). Works with many inverter brands when you have the required sensors.
+
+| | |
+| --- | --- |
+| **HACS / Marketplace name** | Detailed Power Flow Card (`hacs.json`) |
+| **Lovelace YAML type** | `custom:detailed-power-flow-card` |
+| **Resource file** | `detailed-power-flow-card.js` |
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=richx83-ux&repository=powerflow-card&category=plugin)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/richx83-ux/powerflow-card?style=for-the-badge)
 
 ## About this fork (`richx83-ux/powerflow-card`)
 
-This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design, documentation, and releases; this fork is where Detailed Power Flow Card expansions will land.
+This repository starts from [slipx06/sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card) (MIT). Upstream remains the source of the original card design and documentation; this fork ships as **Detailed Power Flow Card** with its own Lovelace type and planned expansions.
 
-Lovelace type: `custom:detailed-power-flow-card` (distinct from upstream `custom:sunsynk-power-flow-card`). UI name: **Detailed Power Flow Card**.
+Integration examples for specific brands (including Sunsynk, Deye, Solis, Lux, FoxESS, Goodwe, Huawei, …) are in the [upstream wiki](https://github.com/slipx06/sunsynk-power-flow-card/wiki).
 
 ### Planned expansions
 
