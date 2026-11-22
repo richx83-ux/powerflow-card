@@ -217,7 +217,21 @@ Additive options that split the essential load sink into **House** and **Cars** 
 | `load_groups.car_name` | Optional | `Cars` | Label under the cars hub. |
 | `large_loads` | Optional | `[]` | Nested chips under House only: `{ id, name, entity, icon?, max_threshold? }` (max 4). |
 | `car_loads` | Optional | `[]` | Nested chips under Cars only for individual vehicles (max 4). |
-| `icons` | Optional | `{}` | Map of node id → `mdi:*` (or image URL). Keys: `house`, `car`, and any `large_loads[].id` / `car_loads[].id`. |
+| `icons` | Optional | `{}` | Optional map of node id → `mdi:*` or image URL. **Known split ids always prefer built-in mockup SVG artwork** (see below); image URLs still override. |
+
+### Built-in mockup split icons
+
+When `load_groups.show_split` is on, these node **ids** draw card-shipped SVG paths (mockup look) instead of generic MDI:
+
+| Node id | Artwork | Suggested YAML (optional — remapped if omitted/old) |
+| --- | --- | --- |
+| `house` | House silhouette | `icons.house: mdi:home` or omit |
+| `car` / `cars` | Side-view car | `icons.car: mdi:car` or omit |
+| `tesla` / `puma` (any vehicle id mapped as car) | Side-view car | `icon: mdi:car` — **not** `mdi:ev-station` |
+| `heat_pump` / `heatpump` | Outdoor condenser unit | `icon: mdi:heat-pump` — **not** `mdi:snowflake` |
+| `sunamp` / `tank` / `water_heater` | Cylindrical tank | `icon: mdi:propane-tank` — **not** `mdi:water-boiler` |
+
+Legacy MDI keys (`mdi:ev-station`, `mdi:snowflake`, `mdi:water-boiler`, etc.) are remapped to the matching mockup SVG automatically. To force custom art, set an **image URL** (`https://…`, `/local/…`, or `data:…`) on `icon:` or under `icons:`.
 
 ### Grid
 

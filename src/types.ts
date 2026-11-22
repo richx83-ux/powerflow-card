@@ -293,6 +293,8 @@ export interface NamedLoadItem {
 	name: string;
 	entity: string;
 	icon: string;
+	/** Built-in mockup SVG key when set — preferred over ha-icon/MDI. */
+	svgKind?: 'car' | 'house' | 'heat_pump' | 'tank';
 	power: number;
 	colour: string;
 	state: CustomEntity;
