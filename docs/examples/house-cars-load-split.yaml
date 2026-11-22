@@ -39,12 +39,13 @@ car_loads:
     entity: sensor.ford_puma_charge_power
     icon: mdi:car
 
+# Optional overrides — defaults already use car / home / heat-pump / propane-tank.
 icons:
   house: mdi:home
-  car: mdi:ev-station
+  car: mdi:car
   heat_pump: mdi:heat-pump
-  sunamp: mdi:water-boiler
-  tesla: mdi:car-electric
+  sunamp: mdi:propane-tank
+  tesla: mdi:car
   puma: mdi:car
 
 load:
