@@ -46,7 +46,10 @@ import {
 	CustomEntity,
 } from './inverters/dto/custom-entity';
 import { icons } from './helpers/icons';
-import { buildLoadGroupSnapshot } from './helpers/load-groups';
+import {
+	buildLoadGroupSnapshot,
+	shouldShowLoadSplit,
+} from './helpers/load-groups';
 
 console.groupCollapsed(
 	`%c ⚡ DETAILED-POWER-FLOW-CARD %c ${localize('common.version')}: ${CARD_VERSION} `,
@@ -2375,7 +2378,16 @@ export class DetailedPowerFlowCard extends LitElement {
 		let viewBoxHeightLite: string;
 		let viewBoxXLite: string = '-2';
 		let viewBoxWidthLite: string = '490';
+		// House/cars hubs sit outside the tight battery-only crops; keep full canvas.
+		const loadSplitActive = shouldShowLoadSplit(config);
 		switch (true) {
+			case loadSplitActive:
+				viewBoxYLite = '0';
+				viewBoxHeightLite = '408';
+				if (!config.wide) {
+					viewBoxWidthLite = '620';
+				}
+				break;
 			case !config.show_solar && config.show_battery && additionalLoad === 0:
 				viewBoxYLite = '138';
 				viewBoxHeightLite = '280';
