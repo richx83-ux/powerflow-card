@@ -14,6 +14,12 @@ namespaces so existing Detailed Power Flow Card configs keep working.
 
 ```yaml
 type: custom:detailed-power-flow-card
+cardstyle: photo # default; classic | lite | compact | full for SVG diagram
+background_image: /local/house-dusk.jpg
+photo:
+  tile_opacity: 0.55
+  tile_blur: 12
+  flow_style: manhattan
 
 # Additive — omit to keep upstream behaviour
 flows:

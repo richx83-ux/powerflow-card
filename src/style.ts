@@ -80,6 +80,240 @@ export const styles: CSSResultGroup = css`
 	.remaining-energy {
 		font-size: 9px;
 	}
+
+	/* —— Photo glass-tile mode —— */
+	.pf-photo-card {
+		overflow: hidden;
+		background: transparent;
+	}
+
+	.pf-photo-stage {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		min-height: 220px;
+		border-radius: var(--ha-card-border-radius, 12px);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.pf-photo-scrim {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			180deg,
+			rgba(8, 12, 18, 0.15) 0%,
+			rgba(8, 12, 18, 0.35) 55%,
+			rgba(8, 12, 18, 0.55) 100%
+		);
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.pf-photo-title {
+		position: absolute;
+		top: 3%;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 4;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	.pf-photo-flows {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
+		pointer-events: none;
+	}
+
+	.pf-flow-base {
+		fill: none;
+		stroke-width: 2.2;
+		stroke-opacity: 0.35;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.pf-flow-dash {
+		fill: none;
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-dasharray: 8 10;
+		animation: pf-flow-march linear infinite;
+	}
+
+	.pf-flow-dash--static {
+		animation: none;
+		stroke-dasharray: none;
+		stroke-opacity: 0.85;
+	}
+
+	.pf-flow-idle {
+		fill: none;
+		stroke-width: 1.5;
+		stroke-opacity: 0.18;
+		stroke-dasharray: 4 8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	@keyframes pf-flow-march {
+		to {
+			stroke-dashoffset: -36;
+		}
+	}
+
+	.pf-photo-tiles {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+	}
+
+	.pf-glass-tile {
+		position: absolute;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 2px;
+		min-width: 92px;
+		padding: 10px 12px 8px;
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		border-radius: 14px;
+		background: rgba(12, 16, 24, calc(var(--pf-tile-opacity, 0.55) * 0.92));
+		-webkit-backdrop-filter: blur(var(--pf-tile-blur, 12px));
+		backdrop-filter: blur(var(--pf-tile-blur, 12px));
+		box-shadow:
+			0 4px 18px rgba(0, 0, 0, 0.35),
+			inset 0 1px 0 rgba(255, 255, 255, 0.08);
+		color: #f2f5f8;
+		cursor: pointer;
+		font: inherit;
+		line-height: 1.15;
+		transition:
+			transform 0.18s ease,
+			border-color 0.18s ease,
+			box-shadow 0.18s ease;
+	}
+
+	.pf-glass-tile:hover,
+	.pf-glass-tile:focus-visible {
+		outline: none;
+		border-color: color-mix(
+			in srgb,
+			var(--pf-tile-accent, var(--pf-accent, #5fb6ad)) 65%,
+			white 20%
+		);
+		box-shadow:
+			0 6px 22px rgba(0, 0, 0, 0.45),
+			0 0 0 1px
+				color-mix(in srgb, var(--pf-tile-accent, #5fb6ad) 40%, transparent);
+		transform: translate(-50%, -50%) scale(1.03);
+	}
+
+	.pf-glass-tile--lg {
+		min-width: 112px;
+		padding: 12px 14px 10px;
+		border-radius: 16px;
+	}
+
+	.pf-glass-tile--sm {
+		min-width: 78px;
+		padding: 8px 10px 6px;
+		border-radius: 12px;
+	}
+
+	.pf-glass-tile--idle {
+		opacity: 0.72;
+	}
+
+	.pf-glass-tile__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 2px;
+		color: var(--pf-tile-accent, var(--pf-accent, #5fb6ad));
+	}
+
+	.pf-photo-icon,
+	.pf-photo-icon-img {
+		display: block;
+		width: 26px;
+		height: 26px;
+		object-fit: contain;
+	}
+
+	.pf-glass-tile--lg .pf-photo-icon,
+	.pf-glass-tile--lg .pf-photo-icon-img {
+		width: 32px;
+		height: 32px;
+	}
+
+	.pf-glass-tile--sm .pf-photo-icon,
+	.pf-glass-tile--sm .pf-photo-icon-img {
+		width: 22px;
+		height: 22px;
+	}
+
+	.pf-glass-tile__power {
+		font-size: 15px;
+		font-weight: 650;
+		letter-spacing: 0.01em;
+		color: #fff;
+	}
+
+	.pf-glass-tile--sm .pf-glass-tile__power {
+		font-size: 13px;
+	}
+
+	.pf-glass-tile__label {
+		font-size: 11px;
+		font-weight: 500;
+		opacity: 0.88;
+		text-transform: none;
+	}
+
+	.pf-glass-tile__sub {
+		font-size: 10px;
+		opacity: 0.7;
+		margin-top: 1px;
+		max-width: 120px;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	@media (max-width: 480px) {
+		.pf-glass-tile {
+			min-width: 72px;
+			padding: 7px 8px 6px;
+		}
+		.pf-glass-tile__power {
+			font-size: 12px;
+		}
+		.pf-glass-tile__label {
+			font-size: 10px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pf-flow-dash {
+			animation: none;
+			stroke-dasharray: none;
+		}
+		.pf-glass-tile {
+			transition: none;
+		}
+	}
 `;
 
 export const getDynamicStyles = (data) => html`
