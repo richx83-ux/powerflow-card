@@ -77,6 +77,13 @@ export const styles: CSSResultGroup = css`
 	.st14 {
 		font-size: 12px;
 	}
+	/* Compact solar total (entity F) — 2× default power label sizes */
+	.pvtotal-power.st14 {
+		font-size: 24px;
+	}
+	.pvtotal-power.st4 {
+		font-size: 28px;
+	}
 	.remaining-energy {
 		font-size: 9px;
 	}
