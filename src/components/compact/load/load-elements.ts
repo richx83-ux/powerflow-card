@@ -60,6 +60,17 @@ export const renderLoadElements = (
 	// nested child chips fit inside the wide viewBox (720) instead of clipping.
 	const loadGroupX = config.wide ? (showLoadSplit ? '8%' : '30%') : '0%';
 
+	// Inverter↔load segment (L4). Path is drawn load→inverter; anim keyPoints
+	// reverse for import. Wide without split uses Load x=30%, so L 117 lands on
+	// the inverter right edge. Wide+split uses x=8%; keep the same world-space
+	// end (117 + 0.22*720 = 275.4) so the line stops at the inverter instead of
+	// continuing through to the grid (which made L1 look like B→I).
+	const esLinePath = !config.wide
+		? 'M 304 218.5 L 264.7 218.5'
+		: showLoadSplit
+			? 'M 304 218.5 L 275.4 218.5'
+			: 'M 304 218.5 L 117 218.5';
+
 	return html`
 		<!-- Load Elements -->
 		<svg id="Load" style="overflow: visible" x="${loadGroupX}">
@@ -754,7 +765,7 @@ export const renderLoadElements = (
 			<svg id="load-flow">
 				${renderPath(
 					'es-line',
-					config.wide ? 'M 304 218.5 L 117 218.5' : 'M 304 218.5 L 264.7 218.5',
+					esLinePath,
 					true,
 					dynamic_colour ? flowColour : loadColour,
 					data.loadLineWidth,
