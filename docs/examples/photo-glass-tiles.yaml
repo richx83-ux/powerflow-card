@@ -2,8 +2,9 @@
 # Place a house photo in /config/www/ (or use a /media/ URL), then point
 # background_image at it. Omit background_image for a dusk gradient placeholder.
 #
-# type stays custom:detailed-power-flow-card. Use cardstyle: classic (or lite /
-# compact / full) for the legacy SVG inverter diagram.
+# Flows route through the inverter hub (grid/pv/battery ↔ inverter ↔ house/cars),
+# matching classic mode. Use cardstyle: classic (or lite / compact / full) for
+# the legacy SVG inverter diagram.
 type: custom:detailed-power-flow-card
 cardstyle: photo
 title: Home power

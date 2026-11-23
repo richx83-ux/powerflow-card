@@ -40,7 +40,7 @@ After installing, add a dashboard resource pointing at `detailed-power-flow-card
 
 1. Create `www/detailed-power-flow-card/`.
 2. Copy `detailed-power-flow-card.js` into that folder.
-3. Add a Lovelace resource, e.g. `/local/detailed-power-flow-card/detailed-power-flow-card.js` (append `?ver=7.7.0` when updating to bust cache).
+3. Add a Lovelace resource, e.g. `/local/detailed-power-flow-card/detailed-power-flow-card.js` (append `?ver=7.7.1` when updating to bust cache).
 4. Add a card with `type: custom:detailed-power-flow-card`.
 
 ## Features
