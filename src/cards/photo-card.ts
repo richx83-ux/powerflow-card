@@ -83,6 +83,7 @@ function resolveIconKind(id: string, icon?: string): PhotoTileIconKind | null {
 	if (key === 'grid') return 'grid';
 	if (key === 'battery' || key === 'bat') return 'battery';
 	if (key === 'load' || key === 'essential') return 'load';
+	if (key === 'inverter' || key === 'inv') return 'inverter';
 	return null;
 }
 
@@ -245,15 +246,21 @@ export const photoCard = (
 	const solarPower = data.totalPV || 0;
 	const gridPower = data.totalGridPower || 0;
 	const batPower = data.batteryPowerTotal ?? data.batteryPower ?? 0;
+	const inverterPower = data.autoScaledInverterPower ?? 0;
 	const housePower = data.showLoadSplit
 		? data.housePower
 		: data.essentialPower || 0;
 	const carPower = data.showLoadSplit ? data.carPower : 0;
 	const essential = data.essentialPower || housePower + carPower;
+	/** Load-side power leaving the inverter toward house/essential. */
+	const loadOutPower = data.showLoadSplit
+		? Math.abs(housePower) + Math.abs(carPower)
+		: Math.abs(essential);
 
 	const solarColour = data.solarColour || '#ffa500';
 	const gridColour = data.gridColour || '#5490c2';
 	const batColour = data.batteryColour || '#ffc0cb';
+	const inverterColour = data.inverterColour || '#9aa0a6';
 	const loadColour = data.loadColour || accent;
 	const houseColour = data.houseColour || loadColour;
 	const carColour = data.carColour || loadColour;
@@ -267,13 +274,15 @@ export const photoCard = (
 				`${Utils.toNum(data.stateDayLoadEnergy.state, data.decimalPlacesEnergy)} kWh`
 			: undefined;
 
-	// Layout centres (%). Left column sources → centre sinks → right children.
-	const solarPos = { x: 18, y: 14 };
-	const gridPos = { x: 18, y: 42 };
-	const batPos = { x: 18, y: 72 };
-	const housePos = { x: 48, y: 36 };
-	const carsPos = { x: 48, y: 72 };
-	const childX = 78;
+	// Layout centres (%). Sources → inverter hub → load sinks → children.
+	// Matches classic semantics: grid/pv/battery terminate at the inverter.
+	const solarPos = { x: 14, y: 14 };
+	const gridPos = { x: 14, y: 42 };
+	const batPos = { x: 14, y: 72 };
+	const invPos = { x: 38, y: 42 };
+	const housePos = { x: 62, y: 34 };
+	const carsPos = { x: 62, y: 72 };
+	const childX = 86;
 	const largeStartY =
 		data.largeLoads.length <= 1 ? 28 : data.largeLoads.length === 2 ? 22 : 16;
 	const carStartY =
@@ -351,6 +360,25 @@ export const photoCard = (
 		});
 	}
 
+	const invActive =
+		Math.abs(inverterPower) > threshold ||
+		solarPower > threshold ||
+		Math.abs(gridPower) > threshold ||
+		Math.abs(batPower) > threshold ||
+		loadOutPower > threshold;
+	tiles.push({
+		id: 'inverter',
+		label: 'Inverter',
+		powerLabel: formatPower(inverterPower, autoScale, decimals),
+		colour: inverterColour,
+		entity: config.entities?.inverter_power_175,
+		iconKind: 'inverter',
+		x: invPos.x,
+		y: invPos.y,
+		active: invActive,
+		size: 'md',
+	});
+
 	tiles.push({
 		id: 'house',
 		label: data.houseName || config.load?.essential_name || 'House',
@@ -410,50 +438,68 @@ export const photoCard = (
 	);
 
 	const flows: FlowDef[] = [];
+	const invPt = pctToCanvas(invPos.x, invPos.y);
 	const housePt = pctToCanvas(housePos.x, housePos.y);
 	const carsPt = pctToCanvas(carsPos.x, carsPos.y);
 
+	// PV → inverter (classic: solar terminates at inverter, not load)
 	if (config.show_solar !== false && solarPower > threshold) {
 		flows.push({
-			id: 'solar-house',
+			id: 'solar-inv',
 			from: pctToCanvas(solarPos.x, solarPos.y),
-			to: housePt,
+			to: invPt,
 			colour: solarColour,
 			power: solarPower,
 			forward: true,
 		});
 	}
 
+	// Grid ↔ inverter (classic grid-line ends at inverter)
 	if (config.show_grid !== false && Math.abs(gridPower) > threshold) {
 		const gridPt = pctToCanvas(gridPos.x, gridPos.y);
 		const importing = gridPower < 0;
 		flows.push({
-			id: 'grid-house',
-			from: importing ? gridPt : housePt,
-			to: importing ? housePt : gridPt,
+			id: 'grid-inv',
+			from: importing ? gridPt : invPt,
+			to: importing ? invPt : gridPt,
 			colour: gridColour,
 			power: gridPower,
 			forward: true,
 		});
 	}
 
+	// Battery ↔ inverter (classic bat-line ends at inverter)
 	if (config.show_battery !== false && Math.abs(batPower) > threshold) {
 		const batPt = pctToCanvas(batPos.x, batPos.y);
 		const charging = batPower < 0;
 		flows.push({
-			id: 'bat-house',
-			from: charging ? housePt : batPt,
-			to: charging ? batPt : housePt,
+			id: 'bat-inv',
+			from: charging ? invPt : batPt,
+			to: charging ? batPt : invPt,
 			colour: batColour,
 			power: batPower,
 			forward: true,
 		});
 	}
 
+	// Inverter → house / essential load
+	const houseFlowPower = data.showLoadSplit ? housePower : essential;
+	if (Math.abs(houseFlowPower) > threshold) {
+		flows.push({
+			id: 'inv-house',
+			from: invPt,
+			to: housePt,
+			colour: houseColour,
+			power: houseFlowPower,
+			forward: true,
+		});
+	}
+
+	// Inverter → cars when load-split cars hub is present
 	if (tiles.some((t) => t.id === 'cars') && Math.abs(carPower) > threshold) {
 		flows.push({
-			id: 'house-cars',
-			from: housePt,
+			id: 'inv-cars',
+			from: invPt,
 			to: carsPt,
 			colour: carColour,
 			power: carPower,

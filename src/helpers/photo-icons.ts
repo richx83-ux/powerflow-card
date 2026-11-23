@@ -10,13 +10,16 @@ import {
 } from './load-split-icons';
 
 export type PhotoTileIconKind =
-	LoadSplitSvgKind | 'solar' | 'grid' | 'battery' | 'load';
+	LoadSplitSvgKind | 'solar' | 'grid' | 'battery' | 'load' | 'inverter';
 
 type IconDef = { paths: LoadSplitPath[] };
 
 const STROKE = 1.15;
 
-const CORE_ICONS: Record<'solar' | 'grid' | 'battery' | 'load', IconDef> = {
+const CORE_ICONS: Record<
+	'solar' | 'grid' | 'battery' | 'load' | 'inverter',
+	IconDef
+> = {
 	solar: {
 		paths: [
 			{ d: 'M12 3.2v2.2', strokeWidth: STROKE },
@@ -58,6 +61,17 @@ const CORE_ICONS: Record<'solar' | 'grid' | 'battery' | 'load', IconDef> = {
 				d: 'M12 3.5L4.5 13.2h5.2L8.2 20.5 19.5 10.2h-5.4L16.2 3.5z',
 				strokeWidth: STROKE,
 			},
+		],
+	},
+	/** Compact hybrid inverter: chassis + display + AC terminals. */
+	inverter: {
+		paths: [
+			{ d: 'M5 5.5h14v13H5z', strokeWidth: STROKE },
+			{ d: 'M8 9.2h8', strokeWidth: 1 },
+			{ d: 'M8 12h5', strokeWidth: 1 },
+			{ d: 'M8 14.8h8', strokeWidth: 1 },
+			{ d: 'M7.2 18.5v2.2M16.8 18.5v2.2', strokeWidth: STROKE },
+			{ d: 'M9.5 20.7h5', strokeWidth: STROKE },
 		],
 	},
 };
